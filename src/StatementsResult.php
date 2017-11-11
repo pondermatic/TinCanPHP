@@ -24,7 +24,8 @@ class StatementsResult
     protected $statements;
     protected $more;
 
-    public function __construct() {
+    public function __construct()
+    {
         if (func_num_args() == 1) {
             $arg = func_get_arg(0);
 
@@ -32,7 +33,8 @@ class StatementsResult
         }
     }
 
-    public function setStatements($value) {
+    public function setStatements($value)
+    {
         foreach ($value as $k => $v) {
             if (! $value[$k] instanceof Statement) {
                 $value[$k] = new Statement($v);
@@ -43,7 +45,19 @@ class StatementsResult
 
         return $this;
     }
-    public function getStatements() { return $this->statements; }
-    public function setMore($value) { $this->more = $value; return $this; }
-    public function getMore() { return $this->more; }
+
+    public function getStatements()
+    {
+        return $this->statements;
+    }
+
+    public function setMore($value)
+    {
+        $this->more = $value; return $this;
+    }
+
+    public function getMore()
+    {
+        return $this->more;
+    }
 }

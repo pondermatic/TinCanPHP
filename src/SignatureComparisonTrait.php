@@ -29,7 +29,8 @@ trait SignatureComparisonTrait
      * @param mixed $fromSig
      * @return array
      */
-    public function compareWithSignature($fromSig) {
+    public function compareWithSignature($fromSig)
+    {
         $skip = property_exists($this, 'signatureSkipProperties') ? self::$signatureSkipProperties : array();
 
         foreach (get_object_vars($this) as $property => $value) {
@@ -57,7 +58,8 @@ trait SignatureComparisonTrait
         );
     }
 
-    private static function doMatch($a, $b, $description) {
+    private static function doMatch($a, $b, $description)
+    {
         $result = array(
             'success' => false,
             'reason' => null

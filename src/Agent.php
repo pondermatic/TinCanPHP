@@ -28,7 +28,8 @@ class Agent implements VersionableInterface, StatementTargetInterface, Comparabl
     protected $openid;
     protected $account;
 
-    public function __construct() {
+    public function __construct()
+    {
         if (func_num_args() == 1) {
             $arg = func_get_arg(0);
 
@@ -36,7 +37,8 @@ class Agent implements VersionableInterface, StatementTargetInterface, Comparabl
         }
     }
 
-    public function asVersion($version) {
+    public function asVersion($version)
+    {
         $result = array(
             'objectType' => $this->objectType
         );
@@ -68,7 +70,8 @@ class Agent implements VersionableInterface, StatementTargetInterface, Comparabl
         return $result;
     }
 
-    public function isIdentified() {
+    public function isIdentified()
+    {
         return (isset($this->mbox) || isset($this->mbox_sha1sum) || isset($this->openid) || isset($this->account));
     }
 
@@ -81,7 +84,8 @@ class Agent implements VersionableInterface, StatementTargetInterface, Comparabl
     // against that need since the serialization via asVersion
     // shouldn't result in that ever for a valid statement
     //
-    public function compareWithSignature($fromSig) {
+    public function compareWithSignature($fromSig)
+    {
         //
         // mbox and mbox_sha1sum are a special case where they can be
         // equal but have to be transformed for comparison, check them
@@ -126,22 +130,44 @@ class Agent implements VersionableInterface, StatementTargetInterface, Comparabl
         return array('success' => true, 'reason' => null);
     }
 
-    public function getObjectType() { return $this->objectType; }
+    public function getObjectType()
+    {
+        return $this->objectType;
+    }
 
-    public function setName($value) { $this->name = $value; return $this; }
-    public function getName() { return $this->name; }
+    public function setName($value)
+    {
+        $this->name = $value;
+        return $this;
+    }
 
-    public function setMbox($value) {
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function setMbox($value)
+    {
         if (isset($value) && (! (stripos($value, 'mailto:') === 0))) {
             $value = 'mailto:' . $value;
         }
         $this->mbox = $value;
         return $this;
     }
-    public function getMbox() { return $this->mbox; }
 
-    public function setMbox_sha1sum($value) { $this->mbox_sha1sum = $value; return $this; }
-    public function getMbox_sha1sum() {
+    public function getMbox()
+    {
+        return $this->mbox;
+    }
+
+    public function setMbox_sha1sum($value)
+    {
+        $this->mbox_sha1sum = $value;
+        return $this;
+    }
+
+    public function getMbox_sha1sum()
+    {
         if (isset($this->mbox_sha1sum)) {
             return $this->mbox_sha1sum;
         }
@@ -150,10 +176,20 @@ class Agent implements VersionableInterface, StatementTargetInterface, Comparabl
             return sha1($this->mbox);
         }
     }
-    public function setOpenid($value) { $this->openid = $value; return $this; }
-    public function getOpenid() { return $this->openid; }
 
-    public function setAccount($value) {
+    public function setOpenid($value)
+    {
+        $this->openid = $value;
+        return $this;
+    }
+
+    public function getOpenid()
+    {
+        return $this->openid;
+    }
+
+    public function setAccount($value)
+    {
         if (! $value instanceof AgentAccount && is_array($value)) {
             $value = new AgentAccount($value);
         }
@@ -162,5 +198,9 @@ class Agent implements VersionableInterface, StatementTargetInterface, Comparabl
 
         return $this;
     }
-    public function getAccount() { return $this->account; }
+
+    public function getAccount()
+    {
+        return $this->account;
+    }
 }

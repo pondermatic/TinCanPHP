@@ -21,5 +21,8 @@ class SubStatement extends StatementBase implements StatementTargetInterface
 {
     protected $objectType = 'SubStatement';
 
-    public function getObjectType() { return $this->objectType; }
+    public function getObjectType()
+    {
+        return $this->objectType;
+    }
 }

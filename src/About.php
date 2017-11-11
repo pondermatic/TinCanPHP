@@ -24,7 +24,8 @@ class About implements VersionableInterface
     protected $version;
     protected $extensions;
 
-    public function __construct() {
+    public function __construct()
+    {
         if (func_num_args() == 1) {
             $arg = func_get_arg(0);
 
@@ -39,10 +40,19 @@ class About implements VersionableInterface
         }
     }
 
-    public function setVersion($value) { $this->version = $value; return $this; }
-    public function getVersion() { return $this->version; }
+    public function setVersion($value)
+    {
+        $this->version = $value;
+        return $this;
+    }
 
-    public function setExtensions($value) {
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    public function setExtensions($value)
+    {
         if (! $value instanceof Extensions) {
             $value = new Extensions($value);
         }
@@ -51,5 +61,9 @@ class About implements VersionableInterface
 
         return $this;
     }
-    public function getExtensions() { return $this->extensions; }
+
+    public function getExtensions()
+    {
+        return $this->extensions;
+    }
 }

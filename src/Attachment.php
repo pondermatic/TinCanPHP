@@ -32,7 +32,8 @@ class Attachment implements VersionableInterface, ComparableInterface
     protected $fileUrl;
     protected $_content;
 
-    public function __construct() {
+    public function __construct()
+    {
         if (func_num_args() == 1) {
             $arg = func_get_arg(0);
 
@@ -57,10 +58,19 @@ class Attachment implements VersionableInterface, ComparableInterface
         }
     }
 
-    public function setUsageType($value) { $this->usageType = $value; return $this; }
-    public function getUsageType() { return $this->usageType; }
+    public function setUsageType($value)
+    {
+        $this->usageType = $value;
+        return $this;
+    }
 
-    public function setDisplay($value) {
+    public function getUsageType()
+    {
+        return $this->usageType;
+    }
+
+    public function setDisplay($value)
+    {
         if (! $value instanceof LanguageMap) {
             $value = new LanguageMap($value);
         }
@@ -69,9 +79,14 @@ class Attachment implements VersionableInterface, ComparableInterface
 
         return $this;
     }
-    public function getDisplay() { return $this->display; }
 
-    public function setDescription($value) {
+    public function getDisplay()
+    {
+        return $this->display;
+    }
+
+    public function setDescription($value)
+    {
         if (! $value instanceof LanguageMap) {
             $value = new LanguageMap($value);
         }
@@ -80,23 +95,71 @@ class Attachment implements VersionableInterface, ComparableInterface
 
         return $this;
     }
-    public function getDescription() { return $this->description; }
 
-    public function setContentType($value) { $this->contentType = $value; return $this; }
-    public function getContentType() { return $this->contentType; }
-    public function setLength($value) { $this->length = $value; return $this; }
-    public function getLength() { return $this->length; }
-    public function setSha2($value) { $this->sha2 = $value; return $this; }
-    public function getSha2() { return $this->sha2; }
-    public function setFileUrl($value) { $this->fileUrl = $value; return $this; }
-    public function getFileUrl() { return $this->fileUrl; }
+    public function getDescription()
+    {
+        return $this->description;
+    }
 
-    public function setContent($value) {
+    public function setContentType($value)
+    {
+        $this->contentType = $value;
+        return $this;
+    }
+
+    public function getContentType()
+    {
+        return $this->contentType;
+    }
+
+    public function setLength($value)
+    {
+        $this->length = $value;
+        return $this;
+    }
+
+    public function getLength()
+    {
+        return $this->length;
+    }
+
+    public function setSha2($value)
+    {
+        $this->sha2 = $value;
+        return $this;
+    }
+
+    public function getSha2()
+    {
+        return $this->sha2;
+    }
+
+    public function setFileUrl($value)
+    {
+        $this->fileUrl = $value;
+        return $this;
+    }
+
+    public function getFileUrl()
+    {
+        return $this->fileUrl;
+    }
+
+    public function setContent($value)
+    {
         $this->_content = $value;
         $this->setLength(strlen($value));
         $this->setSha2(hash("sha256", $value));
         return $this;
     }
-    public function getContent() { return $this->_content; }
-    public function hasContent() { return isset($this->_content); }
+
+    public function getContent()
+    {
+        return $this->_content;
+    }
+
+    public function hasContent()
+    {
+        return isset($this->_content);
+    }
 }

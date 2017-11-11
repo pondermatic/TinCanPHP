@@ -73,7 +73,8 @@ class Score implements VersionableInterface, ComparableInterface
      * @param float       $aMax           the score maximum
      * @param float       $aScaledValue   the scaled score
      */
-    public function __construct($aRawValue = null, $aMin = null, $aMax = null, $aScaledValue = null) {
+    public function __construct($aRawValue = null, $aMin = null, $aMax = null, $aScaledValue = null)
+    {
         if (!is_array($aRawValue)) {
             $aRawValue = [
                 'raw'    => $aRawValue,
@@ -90,7 +91,8 @@ class Score implements VersionableInterface, ComparableInterface
      * @throws InvalidArgumentException
      * @return self
      */
-    public function setScaled($value) {
+    public function setScaled($value)
+    {
         if ($value < static::SCALE_MIN) {
             throw new InvalidArgumentException(
                 sprintf( "Value must be greater than or equal to %s [%s]", static::SCALE_MIN, $value)
@@ -108,7 +110,8 @@ class Score implements VersionableInterface, ComparableInterface
     /**
      * @return null|float
      */
-    public function getScaled() {
+    public function getScaled()
+    {
         return $this->scaled;
     }
 
@@ -117,7 +120,8 @@ class Score implements VersionableInterface, ComparableInterface
      * @throws InvalidArgumentException
      * @return self
      */
-    public function setRaw($value) {
+    public function setRaw($value)
+    {
         if (isset($this->min) && $value < $this->min) {
             throw new InvalidArgumentException(
                 sprintf("Value must be greater than or equal to 'min' (%s) [%s]", $this->min, $value)
@@ -136,7 +140,8 @@ class Score implements VersionableInterface, ComparableInterface
     /**
      * @return null|float
      */
-    public function getRaw() {
+    public function getRaw()
+    {
         return $this->raw;
     }
 
@@ -145,7 +150,8 @@ class Score implements VersionableInterface, ComparableInterface
      * @throws InvalidArgumentException
      * @return self
      */
-    public function setMin($value) {
+    public function setMin($value)
+    {
         if (isset($this->raw) && $value > $this->raw) {
             throw new InvalidArgumentException(
                 sprintf("Value must be less than or equal to 'raw' (%s) [%s]", $this->raw, $value)
@@ -163,7 +169,8 @@ class Score implements VersionableInterface, ComparableInterface
     /**
      * @return null|float
      */
-    public function getMin() {
+    public function getMin()
+    {
         return $this->min;
     }
 
@@ -172,7 +179,8 @@ class Score implements VersionableInterface, ComparableInterface
      * @throws InvalidArgumentException
      * @return self
      */
-    public function setMax($value) {
+    public function setMax($value)
+    {
         if (isset($this->raw) && $value < $this->raw) {
             throw new InvalidArgumentException(
                 sprintf("Value must be greater than or equal to 'raw' (%s) [%s]", $this->raw, $value)
@@ -190,7 +198,8 @@ class Score implements VersionableInterface, ComparableInterface
     /**
      * @return null|float
      */
-    public function getMax() {
+    public function getMax()
+    {
         return $this->max;
     }
 }

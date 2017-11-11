@@ -23,7 +23,8 @@ abstract class Map implements VersionableInterface
 
     protected $_map;
 
-    public function __construct() {
+    public function __construct()
+    {
         if (func_num_args() == 1) {
             $this->_map = func_get_arg(0);
         }
@@ -32,24 +33,30 @@ abstract class Map implements VersionableInterface
         }
     }
 
-    public function asVersion($version = null) {
+    public function asVersion($version = null)
+    {
         if (! $this->isEmpty()) {
             return $this->_map;
         }
     }
 
-    public function set($code, $value) {
+    public function set($code, $value)
+    {
         $this->_map[$code] = $value;
     }
-    private function _unset($code) {
+
+    private function _unset($code)
+    {
         unset($this->_map[$code]);
     }
 
-    public function isEmpty() {
+    public function isEmpty()
+    {
         return count($this->_map) === 0;
     }
 
-    public function __call($func, $args) {
+    public function __call($func, $args)
+    {
         switch ($func) {
             case 'unset':
                 return $this->_unset($args[0]);

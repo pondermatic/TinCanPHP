@@ -21,7 +21,8 @@ class AgentProfile extends Document
 {
     protected $agent;
 
-    public function setAgent($value) {
+    public function setAgent($value)
+    {
         if ((! $value instanceof Agent && ! $value instanceof Group) && is_array($value)) {
             if (isset($value['objectType']) && $value['objectType'] === 'Group') {
                 $value = new Group($value);
@@ -35,5 +36,9 @@ class AgentProfile extends Document
 
         return $this;
     }
-    public function getAgent() { return $this->agent; }
+
+    public function getAgent()
+    {
+        return $this->agent;
+    }
 }

@@ -34,7 +34,8 @@ class ActivityDefinition implements VersionableInterface
     protected $target;
     protected $steps;
 
-    public function __construct() {
+    public function __construct()
+    {
         if (func_num_args() == 1) {
             $arg = func_get_arg(0);
 
@@ -57,10 +58,19 @@ class ActivityDefinition implements VersionableInterface
     }
 
     // FEATURE: check URI?
-    public function setType($value) { $this->type = $value; return $this; }
-    public function getType() { return $this->type; }
+    public function setType($value)
+    {
+        $this->type = $value;
+        return $this;
+    }
 
-    public function setName($value) {
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    public function setName($value)
+    {
         if (! $value instanceof LanguageMap) {
             $value = new LanguageMap($value);
         }
@@ -69,9 +79,14 @@ class ActivityDefinition implements VersionableInterface
 
         return $this;
     }
-    public function getName() { return $this->name; }
 
-    public function setDescription($value) {
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function setDescription($value)
+    {
         if (! $value instanceof LanguageMap) {
             $value = new LanguageMap($value);
         }
@@ -80,12 +95,25 @@ class ActivityDefinition implements VersionableInterface
 
         return $this;
     }
-    public function getDescription() { return $this->description; }
 
-    public function setMoreInfo($value) { $this->moreInfo = $value; return $this; }
-    public function getMoreInfo() { return $this->moreInfo; }
+    public function getDescription()
+    {
+        return $this->description;
+    }
 
-    public function setExtensions($value) {
+    public function setMoreInfo($value)
+    {
+        $this->moreInfo = $value;
+        return $this;
+    }
+
+    public function getMoreInfo()
+    {
+        return $this->moreInfo;
+    }
+
+    public function setExtensions($value)
+    {
         if (! $value instanceof Extensions) {
             $value = new Extensions($value);
         }
@@ -94,22 +122,87 @@ class ActivityDefinition implements VersionableInterface
 
         return $this;
     }
-    public function getExtensions() { return $this->extensions; }
 
-    public function setInteractionType($value) { $this->interactionType = $value; return $this; }
-    public function getInteractionType() { return $this->interactionType; }
-    public function setCorrectResponsesPattern($value) { $this->correctResponsesPattern = $value; return $this; }
-    public function getCorrectResponsesPattern() { return $this->correctResponsesPattern; }
+    public function getExtensions()
+    {
+        return $this->extensions;
+    }
+
+    public function setInteractionType($value)
+    {
+        $this->interactionType = $value;
+        return $this;
+    }
+
+    public function getInteractionType()
+    {
+        return $this->interactionType;
+    }
+
+    public function setCorrectResponsesPattern($value)
+    {
+        $this->correctResponsesPattern = $value;
+        return $this;
+    }
+
+    public function getCorrectResponsesPattern()
+    {
+        return $this->correctResponsesPattern;
+    }
 
     // TODO: make these arrays of InteractionComponents
-    public function setChoices($value) { $this->choices = $value; return $this; }
-    public function getChoices() { return $this->choices; }
-    public function setScale($value) { $this->scale = $value; return $this; }
-    public function getScale() { return $this->scale; }
-    public function setSource($value) { $this->source = $value; return $this; }
-    public function getSource() { return $this->source; }
-    public function setTarget($value) { $this->target = $value; return $this; }
-    public function getTarget() { return $this->target; }
-    public function setSteps($value) { $this->steps = $value; return $this; }
-    public function getSteps() { return $this->steps; }
+    public function setChoices($value)
+    {
+        $this->choices = $value;
+        return $this;
+    }
+
+    public function getChoices()
+    {
+        return $this->choices;
+    }
+
+    public function setScale($value)
+    {
+        $this->scale = $value;
+        return $this;
+    }
+
+    public function getScale()
+    {
+        return $this->scale;
+    }
+
+    public function setSource($value)
+    {
+        $this->source = $value;
+        return $this;
+    }
+
+    public function getSource()
+    {
+        return $this->source;
+    }
+
+    public function setTarget($value)
+    {
+        $this->target = $value;
+        return $this;
+    }
+
+    public function getTarget()
+    {
+        return $this->target;
+    }
+
+    public function setSteps($value)
+    {
+        $this->steps = $value;
+        return $this;
+    }
+
+    public function getSteps()
+    {
+        return $this->steps;
+    }
 }

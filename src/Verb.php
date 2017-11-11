@@ -26,7 +26,8 @@ class Verb implements VersionableInterface, ComparableInterface
     protected $id;
     protected $display;
 
-    public function __construct() {
+    public function __construct()
+    {
         if (func_num_args() == 1) {
             $arg = func_get_arg(0);
 
@@ -39,10 +40,19 @@ class Verb implements VersionableInterface, ComparableInterface
     }
 
     // FEATURE: check IRI?
-    public function setId($value) { $this->id = $value; return $this; }
-    public function getId() { return $this->id; }
+    public function setId($value)
+    {
+        $this->id = $value;
+        return $this;
+    }
 
-    public function setDisplay($value) {
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function setDisplay($value)
+    {
         if (! $value instanceof LanguageMap) {
             $value = new LanguageMap($value);
         }
@@ -51,9 +61,14 @@ class Verb implements VersionableInterface, ComparableInterface
 
         return $this;
     }
-    public function getDisplay() { return $this->display; }
 
-    static public function Voided() {
+    public function getDisplay()
+    {
+        return $this->display;
+    }
+
+    static public function Voided()
+    {
         return new self(
             [
                 'id' => 'http://adlnet.gov/expapi/verbs/voided',

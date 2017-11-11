@@ -28,7 +28,8 @@ class Activity implements VersionableInterface, StatementTargetInterface, Compar
     protected $id;
     protected $definition;
 
-    public function __construct() {
+    public function __construct()
+    {
         if (func_num_args() == 1) {
             $arg = func_get_arg(0);
 
@@ -36,13 +37,24 @@ class Activity implements VersionableInterface, StatementTargetInterface, Compar
         }
     }
 
-    public function getObjectType() { return $this->objectType; }
+    public function getObjectType()
+    {
+        return $this->objectType;
+    }
 
     // FEATURE: check IRI?
-    public function setId($value) { $this->id = $value; return $this; }
-    public function getId() { return $this->id; }
+    public function setId($value)
+    {
+        $this->id = $value;
+        return $this;
+    }
+    public function getId()
+    {
+        return $this->id;
+    }
 
-    public function setDefinition($value) {
+    public function setDefinition($value)
+    {
         if (! $value instanceof ActivityDefinition && is_array($value)) {
             $value = new ActivityDefinition($value);
         }
@@ -51,5 +63,9 @@ class Activity implements VersionableInterface, StatementTargetInterface, Compar
 
         return $this;
     }
-    public function getDefinition() { return $this->definition; }
+
+    public function getDefinition()
+    {
+        return $this->definition;
+    }
 }

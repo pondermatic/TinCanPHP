@@ -26,7 +26,8 @@ class ContextActivities implements VersionableInterface, ComparableInterface
     protected $grouping = array();
     protected $other = array();
 
-    public function __construct() {
+    public function __construct()
+    {
         if (func_num_args() == 1) {
             $arg = func_get_arg(0);
 
@@ -34,7 +35,8 @@ class ContextActivities implements VersionableInterface, ComparableInterface
         }
     }
 
-    private function _listSetter($prop, $value) {
+    private function _listSetter($prop, $value)
+    {
         if (is_array($value)) {
             if (isset($value['id'])) {
                 array_push($this->$prop, new Activity($value));
@@ -57,12 +59,43 @@ class ContextActivities implements VersionableInterface, ComparableInterface
         return $this;
     }
 
-    public function setCategory($value) { return $this->_listSetter('category', $value); }
-    public function getCategory() { return $this->category; }
-    public function setParent($value) { return $this->_listSetter('parent', $value); }
-    public function getParent() { return $this->parent; }
-    public function setGrouping($value) { return $this->_listSetter('grouping', $value); }
-    public function getGrouping() { return $this->grouping; }
-    public function setOther($value) { return $this->_listSetter('other', $value); }
-    public function getOther() { return $this->other; }
+    public function setCategory($value)
+    {
+        return $this->_listSetter('category', $value);
+    }
+
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    public function setParent($value)
+    {
+        return $this->_listSetter('parent', $value);
+    }
+
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    public function setGrouping($value)
+    {
+        return $this->_listSetter('grouping', $value);
+    }
+
+    public function getGrouping()
+    {
+        return $this->grouping;
+    }
+
+    public function setOther($value)
+    {
+        return $this->_listSetter('other', $value);
+    }
+
+    public function getOther()
+    {
+        return $this->other;
+    }
 }

@@ -28,7 +28,8 @@ class Result implements VersionableInterface, ComparableInterface
     protected $response;
     protected $extensions;
 
-    public function __construct() {
+    public function __construct()
+    {
         if (func_num_args() == 1) {
             $arg = func_get_arg(0);
 
@@ -40,7 +41,8 @@ class Result implements VersionableInterface, ComparableInterface
         }
     }
 
-    private function _asVersion(&$result, $version) {
+    private function _asVersion(&$result, $version)
+    {
         //
         // empty string is an invalid duration
         //
@@ -49,7 +51,8 @@ class Result implements VersionableInterface, ComparableInterface
         }
     }
 
-    public function setScore($value) {
+    public function setScore($value)
+    {
         if (! $value instanceof Score && is_array($value)) {
             $value = new Score($value);
         }
@@ -58,18 +61,58 @@ class Result implements VersionableInterface, ComparableInterface
 
         return $this;
     }
-    public function getScore() { return $this->score; }
 
-    public function setSuccess($value) { $this->success = (bool) $value; return $this; }
-    public function getSuccess() { return $this->success; }
-    public function setCompletion($value) { $this->completion = (bool) $value; return $this; }
-    public function getCompletion() { return $this->completion; }
-    public function setDuration($value) { $this->duration = $value; return $this; }
-    public function getDuration() { return $this->duration; }
-    public function setResponse($value) { $this->response = $value; return $this; }
-    public function getResponse() { return $this->response; }
+    public function getScore()
+    {
+        return $this->score;
+    }
 
-    public function setExtensions($value) {
+    public function setSuccess($value)
+    {
+        $this->success = (bool) $value;
+        return $this;
+    }
+
+    public function getSuccess()
+    {
+        return $this->success;
+    }
+
+    public function setCompletion($value)
+    {
+        $this->completion = (bool) $value;
+        return $this;
+    }
+
+    public function getCompletion()
+    {
+        return $this->completion;
+    }
+
+    public function setDuration($value)
+    {
+        $this->duration = $value;
+        return $this;
+    }
+
+    public function getDuration()
+    {
+        return $this->duration;
+    }
+
+    public function setResponse($value)
+    {
+        $this->response = $value;
+        return $this;
+    }
+
+    public function getResponse()
+    {
+        return $this->response;
+    }
+
+    public function setExtensions($value)
+    {
         if (! $value instanceof Extensions) {
             $value = new Extensions($value);
         }
@@ -78,5 +121,9 @@ class Result implements VersionableInterface, ComparableInterface
 
         return $this;
     }
-    public function getExtensions() { return $this->extensions; }
+
+    public function getExtensions()
+    {
+        return $this->extensions;
+    }
 }

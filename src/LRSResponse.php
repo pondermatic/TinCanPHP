@@ -25,7 +25,8 @@ class LRSResponse
     public $content;
     public $httpResponse;
 
-    public function __construct($success, $content, $httpResponse) {
+    public function __construct($success, $content, $httpResponse)
+    {
         $this->success = (bool) $success;
         $this->content = $content;
         $this->httpResponse = $httpResponse;

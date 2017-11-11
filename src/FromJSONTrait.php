@@ -19,7 +19,8 @@ namespace TinCan;
 
 trait FromJSONTrait
 {
-    public static function fromJSON($jsonStr) {
+    public static function fromJSON($jsonStr)
+    {
         //
         // 2nd arg as true means return value is an assoc. array rather than object
         //
@@ -31,5 +32,4 @@ trait FromJSONTrait
         $called_class = get_called_class();
         return new $called_class($cfg);
     }
-
 }

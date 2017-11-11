@@ -28,7 +28,8 @@ abstract class Document
     protected $etag;
     protected $timestamp;
 
-    public function __construct() {
+    public function __construct()
+    {
         if (func_num_args() == 1) {
             $arg = func_get_arg(0);
 
@@ -36,16 +37,52 @@ abstract class Document
         }
     }
 
-    public function setId($value) { $this->id = $value; return $this; }
-    public function getId() { return $this->id; }
-    public function setContentType($value) { $this->contentType = $value; return $this; }
-    public function getContentType() { return $this->contentType; }
-    public function setContent($value) { $this->content = $value; return $this; }
-    public function getContent() { return $this->content; }
-    public function setEtag($value) { $this->etag = $value; return $this; }
-    public function getEtag() { return $this->etag; }
+    public function setId($value)
+    {
+        $this->id = $value;
+        return $this;
+    }
 
-    public function setTimestamp($value) {
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function setContentType($value)
+    {
+        $this->contentType = $value;
+        return $this;
+    }
+
+    public function getContentType()
+    {
+        return $this->contentType;
+    }
+
+    public function setContent($value)
+    {
+        $this->content = $value;
+        return $this;
+    }
+
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    public function setEtag($value)
+    {
+        $this->etag = $value;
+        return $this;
+    }
+
+    public function getEtag()
+    {
+        return $this->etag;
+    }
+
+    public function setTimestamp($value)
+    {
         if (isset($value)) {
             if ($value instanceof \DateTime) {
                 // Use format('c') instead of format(\DateTime::ISO8601) due to bug in format(\DateTime::ISO8601) that generates an invalid timestamp.
@@ -63,5 +100,9 @@ abstract class Document
 
         return $this;
     }
-    public function getTimestamp() { return $this->timestamp; }
+
+    public function getTimestamp()
+    {
+        return $this->timestamp;
+    }
 }

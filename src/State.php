@@ -23,7 +23,8 @@ class State extends Document
     protected $agent;
     protected $registration;
 
-    public function setActivity($value) {
+    public function setActivity($value)
+    {
         if (! $value instanceof Activity && is_array($value)) {
             $value = new Activity($value);
         }
@@ -32,9 +33,14 @@ class State extends Document
 
         return $this;
     }
-    public function getActivity() { return $this->activity; }
 
-    public function setAgent($value) {
+    public function getActivity()
+    {
+        return $this->activity;
+    }
+
+    public function setAgent($value)
+    {
         if ((! $value instanceof Agent && ! $value instanceof Group) && is_array($value)) {
             if (isset($value['objectType']) && $value['objectType'] === 'Group') {
                 $value = new Group($value);
@@ -48,9 +54,14 @@ class State extends Document
 
         return $this;
     }
-    public function getAgent() { return $this->agent; }
 
-    public function setRegistration($value) {
+    public function getAgent()
+    {
+        return $this->agent;
+    }
+
+    public function setRegistration($value)
+    {
         if (isset($value) && ! preg_match(Util::UUID_REGEX, $value)) {
             throw new \InvalidArgumentException('arg1 must be a UUID');
         }
@@ -59,5 +70,9 @@ class State extends Document
 
         return $this;
     }
-    public function getRegistration() { return $this->registration; }
+
+    public function getRegistration()
+    {
+        return $this->registration;
+    }
 }

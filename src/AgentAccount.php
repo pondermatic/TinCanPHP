@@ -24,7 +24,8 @@ class AgentAccount implements VersionableInterface, ComparableInterface
     protected $name;
     protected $homePage;
 
-    public function __construct() {
+    public function __construct()
+    {
         if (func_num_args() == 1) {
             $arg = func_get_arg(0);
 
@@ -32,8 +33,24 @@ class AgentAccount implements VersionableInterface, ComparableInterface
         }
     }
 
-    public function setName($value) { $this->name = $value; return $this; }
-    public function getName() { return $this->name; }
-    public function setHomePage($value) { $this->homePage = $value; return $this; }
-    public function getHomePage() { return $this->homePage; }
+    public function setName($value)
+    {
+        $this->name = $value;
+        return $this;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function setHomePage($value)
+    {
+        $this->homePage = $value; return $this;
+    }
+
+    public function getHomePage()
+    {
+        return $this->homePage;
+    }
 }

@@ -28,7 +28,8 @@ class Person implements VersionableInterface
     protected $openid;
     protected $account;
 
-    public function __construct() {
+    public function __construct()
+    {
         if (func_num_args() == 1) {
             $arg = func_get_arg(0);
 
@@ -36,7 +37,8 @@ class Person implements VersionableInterface
         }
     }
 
-    public function asVersion($version) {
+    public function asVersion($version)
+    {
         $result = array(
             'objectType' => $this->objectType
         );
@@ -65,20 +67,63 @@ class Person implements VersionableInterface
         return $result;
     }
 
-    public function getObjectType() { return $this->objectType; }
+    public function getObjectType()
+    {
+        return $this->objectType;
+    }
 
-    public function setName($value) { $this->name = $value; return $this; }
-    public function getName() { return $this->name; }
+    public function setName($value)
+    {
+        $this->name = $value;
+        return $this;
+    }
 
-    public function setMbox($value) { $this->mbox = $value; return $this; }
-    public function getMbox() { return $this->mbox; }
+    public function getName()
+    {
+        return $this->name;
+    }
 
-    public function setMbox_sha1sum($value) { $this->mbox_sha1sum = $value; return $this; }
-    public function getMbox_sha1sum() {return $this->mbox_sha1sum;}
+    public function setMbox($value)
+    {
+        $this->mbox = $value;
+        return $this;
+    }
 
-    public function setOpenid($value) { $this->openid = $value; return $this; }
-    public function getOpenid() { return $this->openid; }
+    public function getMbox()
+    {
+        return $this->mbox;
+    }
 
-    public function setAccount($value) { $this->account = $value; return $this; }
-    public function getAccount() { return $this->account; }
+    public function setMbox_sha1sum($value)
+    {
+        $this->mbox_sha1sum = $value;
+        return $this;
+    }
+
+    public function getMbox_sha1sum()
+    {
+        return $this->mbox_sha1sum;
+    }
+
+    public function setOpenid($value)
+    {
+        $this->openid = $value;
+        return $this;
+    }
+
+    public function getOpenid()
+    {
+        return $this->openid;
+    }
+
+    public function setAccount($value)
+    {
+        $this->account = $value;
+        return $this;
+    }
+
+    public function getAccount()
+    {
+        return $this->account;
+    }
 }

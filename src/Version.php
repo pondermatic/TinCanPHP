@@ -56,7 +56,8 @@ final class Version
      * @param  string $aValue a version value
      * @throws InvalidArgumentException when the value is not recognized
      */
-    private function __construct($aValue) {
+    private function __construct($aValue)
+    {
         if (!isset(static::$supported[$aValue])) {
             throw new InvalidArgumentException("Invalid version [$aValue]");
         }
@@ -69,7 +70,8 @@ final class Version
      * @param  string $aValue a value to check
      * @return bool
      */
-    public function hasValue($aValue) {
+    public function hasValue($aValue)
+    {
         return $this->value === (string) $aValue;
     }
 
@@ -79,7 +81,8 @@ final class Version
      * @param  string[] $aValueList a list of values to check
      * @return bool
      */
-    public function hasAnyValue(array $aValueList) {
+    public function hasAnyValue(array $aValueList)
+    {
         return in_array($this->value, $aValueList);
     }
 
@@ -88,7 +91,8 @@ final class Version
      *
      * @return bool
      */
-    public function isLatest() {
+    public function isLatest()
+    {
         return $this->value === static::latest();
     }
 
@@ -97,7 +101,8 @@ final class Version
      *
      * @return bool
      */
-    public function isSupported() {
+    public function isSupported()
+    {
         return static::$supported[$this->value];
     }
 
@@ -106,7 +111,8 @@ final class Version
      *
      * @return string
      */
-    public function __toString() {
+    public function __toString()
+    {
         return $this->value;
     }
 
@@ -118,7 +124,8 @@ final class Version
      * @param   array  $arguments unused arguments passed to the method
      * @return  self
      */
-    public static function __callStatic($aValue, array $arguments = []) {
+    public static function __callStatic($aValue, array $arguments = [])
+    {
         $aValue = trim(preg_replace("#v(\d)(95|\d)(\d)?#i", '$1.$2.$3', $aValue), ".");
         if (!isset(static::$instances[$aValue])) {
             static::$instances[$aValue] = new static($aValue);
@@ -132,7 +139,8 @@ final class Version
      * @param  string $aValue a version value
      * @return self
      */
-    public static function fromString($aValue) {
+    public static function fromString($aValue)
+    {
         $aValue = str_replace(".", "", $aValue);
         return static::{"V$aValue"}();
     }
@@ -142,7 +150,8 @@ final class Version
      *
      * @return string[]
      */
-    public static function supported() {
+    public static function supported()
+    {
         return array_keys(array_filter(static::$supported, function($supported) {
             return $supported === true;
         }));
@@ -153,7 +162,8 @@ final class Version
      *
      * @return string
      */
-    public static function latest() {
+    public static function latest()
+    {
         return array_keys(static::$supported)[0];
     }
 }

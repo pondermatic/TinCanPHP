@@ -40,7 +40,8 @@ class Statement extends StatementBase
     protected $version;
     protected $attachments;
 
-    public function __construct() {
+    public function __construct()
+    {
         call_user_func_array('parent::__construct', func_get_args());
 
         if (func_num_args() == 1) {
@@ -60,14 +61,16 @@ class Statement extends StatementBase
         }
     }
 
-    public function stamp() {
+    public function stamp()
+    {
         $this->setId(Util::getUUID());
         $this->setTimestamp(Util::getTimestamp());
 
         return $this;
     }
 
-    public function compareWithSignature($fromSig) {
+    public function compareWithSignature($fromSig)
+    {
         foreach (array('id', 'attachments') as $property) {
             if (! isset($this->$property) && ! isset($fromSig->$property)) {
                 continue;
@@ -100,7 +103,8 @@ class Statement extends StatementBase
         return parent::compareWithSignature($fromSig);
     }
 
-    private function serializeForSignature($version) {
+    private function serializeForSignature($version)
+    {
         if (! isset($this->actor)) {
             throw new \InvalidArgumentException('actor must be present in signed statement');
         }
@@ -121,7 +125,8 @@ class Statement extends StatementBase
         return $result;
     }
 
-    public function sign($privateKeyFile, $privateKeyPass, $options = array()) {
+    public function sign($privateKeyFile, $privateKeyPass, $options = array())
+    {
         if (! isset($options['version'])) {
             $options['version'] = Version::latest();
         }
@@ -209,7 +214,8 @@ class Statement extends StatementBase
         $this->addAttachment($attachment);
     }
 
-    public function verify($options = array()) {
+    public function verify($options = array())
+    {
         if (! isset($options['version'])) {
             $options['version'] = Version::latest();
         }
@@ -349,17 +355,27 @@ class Statement extends StatementBase
         return array('success' => true, 'jws' => $jws);
     }
 
-    public function setId($value) {
+    public function setId($value)
+    {
         if (isset($value) && ! preg_match(Util::UUID_REGEX, $value)) {
             throw new \InvalidArgumentException('arg1 must be a UUID "' . $value . '"');
         }
         $this->id = $value;
         return $this;
     }
-    public function getId() { return $this->id; }
-    public function hasId() { return isset($this->id); }
 
-    public function setStored($value) {
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function hasId()
+    {
+        return isset($this->id);
+    }
+
+    public function setStored($value)
+    {
         if (isset($value)) {
             if ($value instanceof \DateTime) {
                 // Use format('c') instead of format(\DateTime::ISO8601) due to bug in format(\DateTime::ISO8601) that generates an invalid timestamp.
@@ -377,9 +393,14 @@ class Statement extends StatementBase
 
         return $this;
     }
-    public function getStored() { return $this->stored; }
 
-    public function setAuthority($value) {
+    public function getStored()
+    {
+        return $this->stored;
+    }
+
+    public function setAuthority($value)
+    {
         if (! $value instanceof Agent && is_array($value)) {
             $value = new Agent($value);
         }
@@ -388,12 +409,25 @@ class Statement extends StatementBase
 
         return $this;
     }
-    public function getAuthority() { return $this->authority; }
 
-    public function setVersion($value) { $this->version = $value; return $this; }
-    public function getVersion() { return $this->version; }
+    public function getAuthority()
+    {
+        return $this->authority;
+    }
 
-    public function setAttachments($value) {
+    public function setVersion($value)
+    {
+        $this->version = $value;
+        return $this;
+    }
+
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    public function setAttachments($value)
+    {
         foreach ($value as $k => $v) {
             if (! $value[$k] instanceof Attachment) {
                 $value[$k] = new Attachment($value[$k]);
@@ -404,9 +438,18 @@ class Statement extends StatementBase
 
         return $this;
     }
-    public function getAttachments() { return $this->attachments; }
-    public function hasAttachments() { return count($this->attachments) > 0; }
-    public function hasAttachmentsWithContent() {
+
+    public function getAttachments() {
+        return $this->attachments;
+    }
+
+    public function hasAttachments()
+    {
+        return count($this->attachments) > 0;
+    }
+
+    public function hasAttachmentsWithContent()
+    {
         if (! $this->hasAttachments()) {
             return false;
         }
@@ -419,7 +462,9 @@ class Statement extends StatementBase
 
         return false;
     }
-    public function addAttachment($value) {
+
+    public function addAttachment($value)
+    {
         if (! $value instanceof Attachment) {
             $value = new Attachment($value);
         }

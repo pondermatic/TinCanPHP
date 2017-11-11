@@ -23,7 +23,8 @@ class Group extends Agent
 
     protected $member;
 
-    public function __construct() {
+    public function __construct()
+    {
         call_user_func_array('parent::__construct', func_get_args());
 
         if (! isset($this->member)) {
@@ -31,7 +32,8 @@ class Group extends Agent
         }
     }
 
-    public function asVersion($version) {
+    public function asVersion($version)
+    {
         $result = parent::asVersion($version);
 
         if (count($this->member) > 0) {
@@ -45,7 +47,8 @@ class Group extends Agent
         return $result;
     }
 
-    public function compareWithSignature($fromSig) {
+    public function compareWithSignature($fromSig)
+    {
         //
         // if this group is identified then it is the comparison
         // of the identifier that matters
@@ -72,7 +75,8 @@ class Group extends Agent
         return array('success' => true, 'reason' => null);
     }
 
-    public function setMember($value) {
+    public function setMember($value)
+    {
         foreach ($value as $k => $v) {
             if (! $v instanceof Agent) {
                 $value[$k] = new Agent($v);
@@ -83,8 +87,14 @@ class Group extends Agent
 
         return $this;
     }
-    public function getMember() { return $this->member; }
-    public function addMember($value) {
+
+    public function getMember()
+    {
+        return $this->member;
+    }
+
+    public function addMember($value)
+    {
         if (! $value instanceof Agent) {
             $value = new Agent($value);
         }

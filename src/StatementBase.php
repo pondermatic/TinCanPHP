@@ -41,7 +41,8 @@ abstract class StatementBase implements VersionableInterface, ComparableInterfac
     //
     protected $timestamp;
 
-    public function __construct() {
+    public function __construct()
+    {
         if (func_num_args() == 1) {
             $arg = func_get_arg(0);
 
@@ -58,14 +59,16 @@ abstract class StatementBase implements VersionableInterface, ComparableInterfac
         }
     }
 
-    private function _asVersion(&$result, $version) {
+    private function _asVersion(&$result, $version)
+    {
         if (isset($result['target'])) {
             $result['object'] = $result['target'];
             unset($result['target']);
         }
     }
 
-    public function compareWithSignature($fromSig) {
+    public function compareWithSignature($fromSig)
+    {
         foreach (array('actor', 'verb', 'target', 'context', 'result') as $property) {
             if (! isset($this->$property) && ! isset($fromSig->$property)) {
                 continue;
@@ -110,7 +113,8 @@ abstract class StatementBase implements VersionableInterface, ComparableInterfac
         return array('success' => true, 'reason' => null);
     }
 
-    public function setActor($value) {
+    public function setActor($value)
+    {
         if ((! $value instanceof Agent && ! $value instanceof Group) && is_array($value)) {
             if (isset($value['objectType']) && $value['objectType'] === 'Group') {
                 $value = new Group($value);
@@ -124,9 +128,14 @@ abstract class StatementBase implements VersionableInterface, ComparableInterfac
 
         return $this;
     }
-    public function getActor() { return $this->actor; }
 
-    public function setVerb($value) {
+    public function getActor()
+    {
+        return $this->actor;
+    }
+
+    public function setVerb($value)
+    {
         if (! $value instanceof Verb) {
             $value = new Verb($value);
         }
@@ -135,9 +144,14 @@ abstract class StatementBase implements VersionableInterface, ComparableInterfac
 
         return $this;
     }
-    public function getVerb() { return $this->verb; }
 
-    public function setTarget($value) {
+    public function getVerb()
+    {
+        return $this->verb;
+    }
+
+    public function setTarget($value)
+    {
         if (! $value instanceof StatementTargetInterface && is_array($value)) {
             if (isset($value['objectType'])) {
                 if ($value['objectType'] === 'Activity') {
@@ -168,13 +182,25 @@ abstract class StatementBase implements VersionableInterface, ComparableInterfac
 
         return $this;
     }
-    public function getTarget() { return $this->target; }
+
+    public function getTarget()
+    {
+        return $this->target;
+    }
 
     // sugar methods
-    public function setObject($value) { return $this->setTarget($value); }
-    public function getObject() { return $this->getTarget(); }
+    public function setObject($value)
+    {
+        return $this->setTarget($value);
+    }
 
-    public function setResult($value) {
+    public function getObject()
+    {
+        return $this->getTarget();
+    }
+
+    public function setResult($value)
+    {
         if (! $value instanceof Result && is_array($value)) {
             $value = new Result($value);
         }
@@ -183,9 +209,14 @@ abstract class StatementBase implements VersionableInterface, ComparableInterfac
 
         return $this;
     }
-    public function getResult() { return $this->result; }
 
-    public function setContext($value) {
+    public function getResult()
+    {
+        return $this->result;
+    }
+
+    public function setContext($value)
+    {
         if (! $value instanceof Context && is_array($value)) {
             $value = new Context($value);
         }
@@ -194,9 +225,14 @@ abstract class StatementBase implements VersionableInterface, ComparableInterfac
 
         return $this;
     }
-    public function getContext() { return $this->context; }
 
-    public function setTimestamp($value) {
+    public function getContext()
+    {
+        return $this->context;
+    }
+
+    public function setTimestamp($value)
+    {
         if (isset($value)) {
             if ($value instanceof \DateTime) {
                 // Use format('c') instead of format(\DateTime::ISO8601) due to bug in format(\DateTime::ISO8601) that generates an invalid timestamp.
@@ -214,5 +250,9 @@ abstract class StatementBase implements VersionableInterface, ComparableInterfac
 
         return $this;
     }
-    public function getTimestamp() { return $this->timestamp; }
+
+    public function getTimestamp()
+    {
+        return $this->timestamp;
+    }
 }

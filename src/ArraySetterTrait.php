@@ -19,7 +19,8 @@ namespace TinCan;
 
 trait ArraySetterTrait
 {
-    private function _fromArray($options) {
+    private function _fromArray($options)
+    {
         foreach (get_object_vars($this) as $k => $v) {
             $method = 'set' . ucfirst($k);
             if (isset($options[$k]) && method_exists($this, $method)) {

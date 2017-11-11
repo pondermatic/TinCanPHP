@@ -27,7 +27,8 @@ class StatementRef implements VersionableInterface, StatementTargetInterface, Co
 
     protected $id;
 
-    public function __construct() {
+    public function __construct()
+    {
         if (func_num_args() == 1) {
             $arg = func_get_arg(0);
 
@@ -35,14 +36,22 @@ class StatementRef implements VersionableInterface, StatementTargetInterface, Co
         }
     }
 
-    public function getObjectType() { return $this->objectType; }
+    public function getObjectType()
+    {
+        return $this->objectType;
+    }
 
-    public function setId($value) {
+    public function setId($value)
+    {
         if (isset($value) && ! preg_match(Util::UUID_REGEX, $value)) {
             throw new InvalidArgumentException('arg1 must be a UUID');
         }
         $this->id = $value;
         return $this;
     }
-    public function getId() { return $this->id; }
+
+    public function getId()
+    {
+        return $this->id;
+    }
 }

@@ -33,7 +33,8 @@ class Context implements VersionableInterface, ComparableInterface
     protected $statement;
     protected $extensions;
 
-    public function __construct() {
+    public function __construct()
+    {
         if (func_num_args() == 1) {
             $arg = func_get_arg(0);
 
@@ -54,16 +55,22 @@ class Context implements VersionableInterface, ComparableInterface
         }
     }
 
-    public function setRegistration($value) {
+    public function setRegistration($value)
+    {
         if (isset($value) && ! preg_match(Util::UUID_REGEX, $value)) {
             throw new InvalidArgumentException('arg1 must be a UUID');
         }
         $this->registration = $value;
         return $this;
     }
-    public function getRegistration() { return $this->registration; }
 
-    public function setInstructor($value) {
+    public function getRegistration()
+    {
+        return $this->registration;
+    }
+
+    public function setInstructor($value)
+    {
         if (! ($value instanceof Agent || $value instanceof Group) && is_array($value)) {
             if (isset($value['objectType']) && $value['objectType'] === "Group") {
                 $value = new Group($value);
@@ -77,9 +84,14 @@ class Context implements VersionableInterface, ComparableInterface
 
         return $this;
     }
-    public function getInstructor() { return $this->instructor; }
 
-    public function setTeam($value) {
+    public function getInstructor()
+    {
+        return $this->instructor;
+    }
+
+    public function setTeam($value)
+    {
         if (! $value instanceof Group && is_array($value)) {
             $value = new Group($value);
         }
@@ -88,9 +100,14 @@ class Context implements VersionableInterface, ComparableInterface
 
         return $this;
     }
-    public function getTeam() { return $this->team; }
 
-    public function setContextActivities($value) {
+    public function getTeam()
+    {
+        return $this->team;
+    }
+
+    public function setContextActivities($value)
+    {
         if (! $value instanceof ContextActivities) {
             $value = new ContextActivities($value);
         }
@@ -99,16 +116,47 @@ class Context implements VersionableInterface, ComparableInterface
 
         return $this;
     }
-    public function getContextActivities() { return $this->contextActivities; }
 
-    public function setRevision($value) { $this->revision = $value; return $this; }
-    public function getRevision() { return $this->revision; }
-    public function setPlatform($value) { $this->platform = $value; return $this; }
-    public function getPlatform() { return $this->platform; }
-    public function setLanguage($value) { $this->language = $value; return $this; }
-    public function getLanguage() { return $this->language; }
+    public function getContextActivities()
+    {
+        return $this->contextActivities;
+    }
 
-    public function setStatement($value) {
+    public function setRevision($value)
+    {
+        $this->revision = $value;
+        return $this;
+    }
+
+    public function getRevision()
+    {
+        return $this->revision;
+    }
+
+    public function setPlatform($value)
+    {
+        $this->platform = $value;
+        return $this;
+    }
+
+    public function getPlatform()
+    {
+        return $this->platform;
+    }
+
+    public function setLanguage($value)
+    {
+        $this->language = $value;
+        return $this;
+    }
+
+    public function getLanguage()
+    {
+        return $this->language;
+    }
+
+    public function setStatement($value)
+    {
         if (! $value instanceof StatementRef && is_array($value)) {
             $value = new StatementRef($value);
         }
@@ -117,9 +165,14 @@ class Context implements VersionableInterface, ComparableInterface
 
         return $this;
     }
-    public function getStatement() { return $this->statement; }
 
-    public function setExtensions($value) {
+    public function getStatement()
+    {
+        return $this->statement;
+    }
+
+    public function setExtensions($value)
+    {
         if (! $value instanceof Extensions) {
             $value = new Extensions($value);
         }
@@ -128,5 +181,9 @@ class Context implements VersionableInterface, ComparableInterface
 
         return $this;
     }
-    public function getExtensions() { return $this->extensions; }
+
+    public function getExtensions()
+    {
+        return $this->extensions;
+    }
 }

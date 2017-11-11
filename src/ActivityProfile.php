@@ -21,7 +21,8 @@ class ActivityProfile extends Document
 {
     protected $activity;
 
-    public function setActivity($value) {
+    public function setActivity($value)
+    {
         if (! $value instanceof Activity && is_array($value)) {
             $value = new Activity($value);
         }
@@ -30,5 +31,9 @@ class ActivityProfile extends Document
 
         return $this;
     }
-    public function getActivity() { return $this->activity; }
+
+    public function getActivity()
+    {
+        return $this->activity;
+    }
 }

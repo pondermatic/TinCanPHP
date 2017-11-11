@@ -25,7 +25,8 @@ class Util
     // Based on code from
     // http://stackoverflow.com/questions/2040240/php-function-to-generate-v4-uuid
     //
-    public static function getUUID() {
+    public static function getUUID()
+    {
         $randomString = openssl_random_pseudo_bytes(16);
         $time_low = bin2hex(substr($randomString, 0, 4));
         $time_mid = bin2hex(substr($randomString, 4, 2));
@@ -67,7 +68,8 @@ class Util
     //
     // Based on code from
     // http://stackoverflow.com/a/4414060/1464957
-    public static function getTimestamp() {
+    public static function getTimestamp()
+    {
         $time = microtime(true);
         $microseconds = sprintf('%06d', ($time - floor($time)) * 1000000);
         $millseconds = round($microseconds, -3)/1000;

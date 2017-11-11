@@ -19,7 +19,8 @@ namespace TinCan;
 
 class Extensions extends Map implements ComparableInterface
 {
-    public function compareWithSignature($fromSig) {
+    public function compareWithSignature($fromSig)
+    {
         $sigMap = $fromSig->_map;
 
         $keys = array_unique(
