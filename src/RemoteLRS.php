@@ -65,9 +65,7 @@ class RemoteLRS implements LRSInterface
         }
     }
 
-    protected function sendRequest($method, $resource) {
-        $options = func_num_args() === 3 ? func_get_arg(2) : array();
-
+    protected function sendRequest($method, $resource, $options = []) {
         //
         // allow for full path requests, for instance as used by the
         // moreStatements method which is based on server root rather
@@ -567,18 +565,12 @@ class RemoteLRS implements LRSInterface
         return;
     }
 
-    public function queryStatements($query) {
+    public function queryStatements($query, $options = []) {
         $requestCfg = array(
             'params' => $this->_queryStatementsRequestParams($query),
         );
-        if (func_num_args() > 1) {
-            $options = func_get_arg(1);
-
-            if (isset($options)) {
-                if (isset($options['headers'])) {
-                    $requestCfg['headers'] = $options['headers'];
-                }
-            }
+        if (isset($options['headers'])) {
+            $requestCfg['headers'] = $options['headers'];
         }
 
         $response = $this->sendRequest('GET', 'statements', $requestCfg);
@@ -605,7 +597,7 @@ class RemoteLRS implements LRSInterface
         return $response;
     }
 
-    public function retrieveStateIds($activity, $agent) {
+    public function retrieveStateIds($activity, $agent, $options = []) {
         if (! $activity instanceof Activity) {
             $activity = new Activity($activity);
         }
@@ -619,16 +611,11 @@ class RemoteLRS implements LRSInterface
                 'agent'      => json_encode($agent->asVersion($this->version)),
             ),
         );
-        if (func_num_args() > 2) {
-            $options = func_get_arg(2);
-            if (isset($options)) {
-                if (isset($options['registration'])) {
-                    $requestCfg['params']['registration'] = $options['registration'];
-                }
-                if (isset($options['since'])) {
-                    $requestCfg['params']['since'] = $options['since'];
-                }
-            }
+        if (isset($options['registration'])) {
+            $requestCfg['params']['registration'] = $options['registration'];
+        }
+        if (isset($options['since'])) {
+            $requestCfg['params']['since'] = $options['since'];
         }
 
         $response = $this->sendRequest('GET', 'activities/state', $requestCfg);
@@ -640,7 +627,7 @@ class RemoteLRS implements LRSInterface
         return $response;
     }
 
-    public function retrieveState($activity, $agent, $id) {
+    public function retrieveState($activity, $agent, $id, $options = []) {
         if (! $activity instanceof Activity) {
             $activity = new Activity($activity);
         }
@@ -657,13 +644,8 @@ class RemoteLRS implements LRSInterface
             ),
             'ignore404' => true,
         );
-        if (func_num_args() > 3) {
-            $options = func_get_arg(3);
-            if (isset($options)) {
-                if (isset($options['registration'])) {
-                    $requestCfg['params']['registration'] = $registration = $options['registration'];
-                }
-            }
+        if (isset($options['registration'])) {
+            $requestCfg['params']['registration'] = $registration = $options['registration'];
         }
 
         $response = $this->sendRequest('GET', 'activities/state', $requestCfg);
@@ -696,7 +678,7 @@ class RemoteLRS implements LRSInterface
         return $response;
     }
 
-    public function saveState($activity, $agent, $id, $content) {
+    public function saveState($activity, $agent, $id, $content, $options = []) {
         if (! $activity instanceof Activity) {
             $activity = new Activity($activity);
         }
@@ -718,19 +700,14 @@ class RemoteLRS implements LRSInterface
             'content' => $content,
         );
         $registration = null;
-        if (func_num_args() > 4) {
-            $options = func_get_arg(4);
-            if (isset($options)) {
-                if (isset($options['contentType'])) {
-                    $requestCfg['headers']['Content-Type'] = $contentType = $options['contentType'];
-                }
-                if (isset($options['etag'])) {
-                    $requestCfg['headers']['If-Match'] = $options['etag'];
-                }
-                if (isset($options['registration'])) {
-                    $requestCfg['params']['registration'] = $registration = $options['registration'];
-                }
-            }
+        if (isset($options['contentType'])) {
+            $requestCfg['headers']['Content-Type'] = $contentType = $options['contentType'];
+        }
+        if (isset($options['etag'])) {
+            $requestCfg['headers']['If-Match'] = $options['etag'];
+        }
+        if (isset($options['registration'])) {
+            $requestCfg['params']['registration'] = $registration = $options['registration'];
         }
 
         $response = $this->sendRequest('PUT', 'activities/state', $requestCfg);
@@ -768,7 +745,7 @@ class RemoteLRS implements LRSInterface
     // separate method signature
     //
     // TODO: Etag?
-    private function _deleteState($activity, $agent, $id) {
+    private function _deleteState($activity, $agent, $id, $options = []) {
         if (! $activity instanceof Activity) {
             $activity = new Activity($activity);
         }
@@ -786,13 +763,8 @@ class RemoteLRS implements LRSInterface
             $requestCfg['params']['stateId'] = $id;
         }
 
-        if (func_num_args() > 3) {
-            $options = func_get_arg(3);
-            if (isset($options)) {
-                if (isset($options['registration'])) {
-                    $requestCfg['params']['registration'] = $options['registration'];
-                }
-            }
+        if (isset($options['registration'])) {
+            $requestCfg['params']['registration'] = $options['registration'];
         }
 
         $response = $this->sendRequest('DELETE', 'activities/state', $requestCfg);
@@ -800,22 +772,15 @@ class RemoteLRS implements LRSInterface
         return $response;
     }
 
-    public function deleteState($activity, $agent, $id) {
-        return call_user_func_array(array($this, '_deleteState'), func_get_args());
+    public function deleteState($activity, $agent, $id, $options =[]) {
+        return $this->_deleteState($activity, $agent, $id, $options);
     }
 
-    public function clearState($activity, $agent) {
-        $args = array($activity, $agent, null);
-
-        $numArgs = func_num_args();
-        if ($numArgs > 2) {
-            $args = array_merge($args, array_slice(func_get_args(), 2));
-        }
-
-        return call_user_func_array(array($this, '_deleteState'), $args);
+    public function clearState($activity, $agent, $options = []) {
+        return $this->_deleteState($activity, $agent, null, $options);
     }
 
-    public function retrieveActivityProfileIds($activity) {
+    public function retrieveActivityProfileIds($activity, $options = []) {
         if (! $activity instanceof Activity) {
             $activity = new Activity($activity);
         }
@@ -825,13 +790,8 @@ class RemoteLRS implements LRSInterface
                 'activityId' => $activity->getId()
             )
         );
-        if (func_num_args() > 1) {
-            $options = func_get_arg(1);
-            if (isset($options)) {
-                if (isset($options['since'])) {
-                    $requestCfg['params']['since'] = $options['since'];
-                }
-            }
+        if (isset($options['since'])) {
+            $requestCfg['params']['since'] = $options['since'];
         }
 
         $response = $this->sendRequest('GET', 'activities/profile', $requestCfg);
@@ -883,7 +843,7 @@ class RemoteLRS implements LRSInterface
         return $response;
     }
 
-    public function saveActivityProfile($activity, $id, $content) {
+    public function saveActivityProfile($activity, $id, $content, $options = []) {
         if (! $activity instanceof Activity) {
             $activity = new Activity($activity);
         }
@@ -900,16 +860,11 @@ class RemoteLRS implements LRSInterface
             ),
             'content' => $content,
         );
-        if (func_num_args() > 3) {
-            $options = func_get_arg(3);
-            if (isset($options)) {
-                if (isset($options['contentType'])) {
-                    $requestCfg['headers']['Content-Type'] = $contentType = $options['contentType'];
-                }
-                if (isset($options['etag'])) {
-                    $requestCfg['headers']['If-Match'] = $options['etag'];
-                }
-            }
+        if (isset($options['contentType'])) {
+            $requestCfg['headers']['Content-Type'] = $contentType = $options['contentType'];
+        }
+        if (isset($options['etag'])) {
+            $requestCfg['headers']['If-Match'] = $options['etag'];
         }
 
         $response = $this->sendRequest('PUT', 'activities/profile', $requestCfg);
@@ -978,7 +933,7 @@ class RemoteLRS implements LRSInterface
     }
 
     // TODO: groups?
-    public function retrieveAgentProfileIds($agent) {
+    public function retrieveAgentProfileIds($agent, $options = []) {
         if (! $agent instanceof Agent) {
             $agent = new Agent($agent);
         }
@@ -988,13 +943,8 @@ class RemoteLRS implements LRSInterface
                 'agent' => json_encode($agent->asVersion($this->version))
             )
         );
-        if (func_num_args() > 1) {
-            $options = func_get_arg(1);
-            if (isset($options)) {
-                if (isset($options['since'])) {
-                    $requestCfg['params']['since'] = $options['since'];
-                }
-            }
+        if (isset($options['since'])) {
+            $requestCfg['params']['since'] = $options['since'];
         }
 
         $response = $this->sendRequest('GET', 'agents/profile', $requestCfg);
@@ -1046,7 +996,7 @@ class RemoteLRS implements LRSInterface
         return $response;
     }
 
-    public function saveAgentProfile($agent, $id, $content) {
+    public function saveAgentProfile($agent, $id, $content, $options = []) {
         if (! $agent instanceof Agent) {
             $agent = new Agent($agent);
         }
@@ -1063,16 +1013,11 @@ class RemoteLRS implements LRSInterface
             ),
             'content' => $content,
         );
-        if (func_num_args() > 3) {
-            $options = func_get_arg(3);
-            if (isset($options)) {
-                if (isset($options['contentType'])) {
-                    $requestCfg['headers']['Content-Type'] = $contentType = $options['contentType'];
-                }
-                if (isset($options['etag'])) {
-                    $requestCfg['headers']['If-Match'] = $options['etag'];
-                }
-            }
+        if (isset($options['contentType'])) {
+            $requestCfg['headers']['Content-Type'] = $contentType = $options['contentType'];
+        }
+        if (isset($options['etag'])) {
+            $requestCfg['headers']['If-Match'] = $options['etag'];
         }
 
         $response = $this->sendRequest('PUT', 'agents/profile', $requestCfg);

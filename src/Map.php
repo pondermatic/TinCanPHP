@@ -23,9 +23,9 @@ abstract class Map implements VersionableInterface
 
     protected $_map;
 
-    public function __construct() {
-        if (func_num_args() == 1) {
-            $this->_map = func_get_arg(0);
+    public function __construct($arg = []) {
+        if ($arg) {
+            $this->_map = $arg;
         }
         else {
             $this->_map = array();

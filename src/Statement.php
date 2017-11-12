@@ -40,20 +40,16 @@ class Statement extends StatementBase
     protected $version;
     protected $attachments;
 
-    public function __construct() {
-        call_user_func_array('parent::__construct', func_get_args());
+    public function __construct($arg = []) {
+        parent::__construct($arg);
 
-        if (func_num_args() == 1) {
-            $arg = func_get_arg(0);
-
-            //
-            // 'object' isn't in the list of properties so ._fromArray doesn't
-            // pick it up correctly, but 'target' and 'object' shouldn't be in
-            // the args at the same time, so handle 'object' here
-            //
-            if (isset($arg['object'])) {
-                $this->setObject($arg['object']);
-            }
+        //
+        // 'object' isn't in the list of properties so ._fromArray doesn't
+        // pick it up correctly, but 'target' and 'object' shouldn't be in
+        // the args at the same time, so handle 'object' here
+        //
+        if (isset($arg['object'])) {
+            $this->setObject($arg['object']);
         }
         if (! isset($this->attachments)) {
             $this->setAttachments(array());
