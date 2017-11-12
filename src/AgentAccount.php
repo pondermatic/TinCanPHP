@@ -24,10 +24,8 @@ class AgentAccount implements VersionableInterface, ComparableInterface
     protected $name;
     protected $homePage;
 
-    public function __construct() {
-        if (func_num_args() == 1) {
-            $arg = func_get_arg(0);
-
+    public function __construct($arg = []) {
+        if ($arg) {
             $this->_fromArray($arg);
         }
     }

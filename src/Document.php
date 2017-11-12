@@ -28,10 +28,8 @@ abstract class Document
     protected $etag;
     protected $timestamp;
 
-    public function __construct() {
-        if (func_num_args() == 1) {
-            $arg = func_get_arg(0);
-
+    public function __construct($arg = []) {
+        if ($arg) {
             $this->_fromArray($arg);
         }
     }
