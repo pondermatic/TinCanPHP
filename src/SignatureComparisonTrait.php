@@ -24,10 +24,10 @@ trait SignatureComparisonTrait
 {
     /**
      * Compares the instance with a provided instance for determining
-     * whether an object received in a signature is a meaningful match
+     * whether an object received in a signature is a meaningful match.
      *
-     * @param mixed $fromSig
-     * @return array
+     * @param object $fromSig
+     * @return array ['success' => bool, 'reason' => string]
      */
     public function compareWithSignature($fromSig) {
         $skip = property_exists($this, 'signatureSkipProperties') ? self::$signatureSkipProperties : array();

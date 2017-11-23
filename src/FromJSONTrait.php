@@ -19,6 +19,13 @@ namespace TinCan;
 
 trait FromJSONTrait
 {
+    /**
+     * Returns an object of this class with properties set from the JSON string.
+     *
+     * @param string $jsonStr
+     * @throws JSONParseErrorException if $jsonStr can not be decoded
+     * @return object
+     */
     public static function fromJSON($jsonStr) {
         //
         // 2nd arg as true means return value is an assoc. array rather than object
@@ -31,5 +38,4 @@ trait FromJSONTrait
         $called_class = get_called_class();
         return new $called_class($cfg);
     }
-
 }

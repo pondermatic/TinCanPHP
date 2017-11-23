@@ -22,31 +22,93 @@ abstract class Document
 {
     use ArraySetterTrait;
 
+    /** @var string */
     protected $id;
+
+    /** @var string */
     protected $contentType;
+
+    /** @var string */
     protected $content;
+
+    /** @var string HTTP 1.1 entity tag */
     protected $etag;
+
+    /** @var string ISO 8601 */
     protected $timestamp;
 
+    /**
+     * Document constructor.
+     *
+     * $arg elements:
+     * * var string $content
+     * * var string $contentType
+     * * var string $etag HTTP 1.1 entity tag
+     * * var string $id
+     * * var \DateTime|string $timestamp ISO 8601
+     *
+     * @param array $arg
+     */
     public function __construct($arg = []) {
         if ($arg) {
             $this->_fromArray($arg);
         }
     }
 
+    /**
+     * @param string $value
+     * @return $this
+     */
     public function setId($value) { $this->id = $value; return $this; }
+
+    /**
+     * @return string
+     */
     public function getId() { return $this->id; }
+
+    /**
+     * @param string $value
+     * @return $this
+     */
     public function setContentType($value) { $this->contentType = $value; return $this; }
+
+    /**
+     * @return string
+     */
     public function getContentType() { return $this->contentType; }
+
+    /**
+     * @param string $value
+     * @return $this
+     */
     public function setContent($value) { $this->content = $value; return $this; }
+
+    /**
+     * @return string
+     */
     public function getContent() { return $this->content; }
+
+    /**
+     * @param string $value HTTP 1.1 entity tag
+     * @return $this
+     */
     public function setEtag($value) { $this->etag = $value; return $this; }
+
+    /**
+     * @return string HTTP 1.1 entity tag
+     */
     public function getEtag() { return $this->etag; }
 
+    /**
+     * @param \DateTime|string $value ISO 8601
+     * @throws \InvalidArgumentException if $value is not a DateTime object or a string
+     * @return $this
+     */
     public function setTimestamp($value) {
         if (isset($value)) {
             if ($value instanceof \DateTime) {
-                // Use format('c') instead of format(\DateTime::ISO8601) due to bug in format(\DateTime::ISO8601) that generates an invalid timestamp.
+                // Use format('c') instead of format(\DateTime::ISO8601) due to bug
+                // in format(\DateTime::ISO8601) that generates an invalid timestamp.
                 $value = $value->format('c');
             }
             elseif (is_string($value)) {
@@ -61,5 +123,9 @@ abstract class Document
 
         return $this;
     }
+
+    /**
+     * @return \DateTime|string
+     */
     public function getTimestamp() { return $this->timestamp; }
 }

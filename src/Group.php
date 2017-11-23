@@ -17,12 +17,31 @@
 
 namespace TinCan;
 
+/**
+ * A group of actors tracked using Statements performing an action within
+ * an Activity. Is the "I" in "I did this".
+ */
 class Group extends Agent
 {
+    /** @inheritdoc */
     protected $objectType = 'Group';
 
+    /** @var Agent[] */
     protected $member;
 
+    /**
+     * Group constructor.
+     *
+     * $arg elements:
+     * * var AgentAccount|array $account
+     * * var string $mbox mailto IRI
+     * * var string $mbox_sha1sum
+     * * var Agent[]|array[] $member
+     * * var string $name
+     * * var string $openid
+     *
+     * @param array $arg
+     */
     public function __construct($arg = []) {
         parent::__construct($arg);
 
@@ -31,6 +50,12 @@ class Group extends Agent
         }
     }
 
+    /**
+     * Collects defined object properties for a given version into an array.
+     *
+     * @param Version|string $version
+     * @return array
+     */
     public function asVersion($version) {
         $result = parent::asVersion($version);
 
@@ -45,6 +70,13 @@ class Group extends Agent
         return $result;
     }
 
+    /**
+     * Compares the instance with a provided instance for determining
+     * whether an object received in a signature is a meaningful match.
+     *
+     * @param Group $fromSig
+     * @return array ['success' => bool, 'reason' => string]
+     */
     public function compareWithSignature($fromSig) {
         //
         // if this group is identified then it is the comparison
@@ -72,6 +104,10 @@ class Group extends Agent
         return array('success' => true, 'reason' => null);
     }
 
+    /**
+     * @param Agent[]|array[] $value
+     * @return $this
+     */
     public function setMember($value) {
         foreach ($value as $k => $v) {
             if (! $v instanceof Agent) {
@@ -83,7 +119,16 @@ class Group extends Agent
 
         return $this;
     }
+
+    /**
+     * @return Agent[]
+     */
     public function getMember() { return $this->member; }
+
+    /**
+     * @param Agent|array $value
+     * @return $this
+     */
     public function addMember($value) {
         if (! $value instanceof Agent) {
             $value = new Agent($value);

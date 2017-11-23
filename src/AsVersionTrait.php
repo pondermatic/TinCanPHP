@@ -25,9 +25,9 @@ use DomainException;
 trait AsVersionTrait
 {
     /**
-     * Collects defined object properties for a given version into an array
+     * Collects defined object properties for a given version into an array.
      *
-     * @param  mixed $version
+     * @param  Version|string $version
      * @return array
      */
     public function asVersion($version) {
@@ -72,7 +72,7 @@ trait AsVersionTrait
     }
 
     /**
-     * Prevent external mutation
+     * Prevent external mutation.
      *
      * @param  string $property
      * @param  mixed  $value

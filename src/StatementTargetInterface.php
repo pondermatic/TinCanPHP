@@ -19,8 +19,22 @@ namespace TinCan;
 
 interface StatementTargetInterface
 {
+    /**
+     * @return string
+     */
     public function getObjectType();
+
+    /**
+     * Collects defined object properties for a given version into an array.
+     *
+     * @param Version|string $version
+     * @return string
+     */
     public function asVersion($version);
 
+    /**
+     * @param string $jsonStr
+     * @return mixed
+     */
     public static function fromJSON($jsonStr);
 }

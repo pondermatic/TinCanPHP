@@ -19,5 +19,11 @@ namespace TinCan;
 
 interface VersionableInterface
 {
+    /**
+     * Collects defined object properties for a given version into an array.
+     *
+     * @param Version|string $version
+     * @return array
+     */
     public function asVersion($version);
 }

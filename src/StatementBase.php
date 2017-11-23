@@ -17,30 +17,57 @@
 
 namespace TinCan;
 
+/**
+ * Basic implementation of a Statement.
+ */
 abstract class StatementBase implements VersionableInterface, ComparableInterface
 {
     use ArraySetterTrait, FromJSONTrait, AsVersionTrait, SignatureComparisonTrait;
 
+    /** @var Agent|Group */
     protected $actor;
+
+    /** @var Verb */
     protected $verb;
+
+    /** @var Activity|Agent|Group|StatementRef|SubStatement */
     protected $target;
+
+    /** @var Result */
     protected $result;
+
+    /** @var Context */
     protected $context;
 
-    //
-    // timestamp *must* store a string because DateTime doesn't
-    // support sub-second precision, the setter will take a DateTime and convert
-    // it to the proper ISO8601 representation, but if a user needs sub-second
-    // precision as afforded by the spec they will have to create their own,
-    // they can see TinCan\Util::getTimestamp for an example of how to do so
-    //
-    // based on the signature comparison tests it seems that DateTime can store
-    // subsecond precisions, but just not output them as part of ISO handling?
-    // it might be possible to switch to a DateTime and just do manual formatting
-    // still with the subsecond value (need to research it fully)
-    //
+    /**
+     * timestamp *must* store a string because DateTime doesn't
+     * support sub-second precision, the setter will take a DateTime and convert
+     * it to the proper ISO8601 representation, but if a user needs sub-second
+     * precision as afforded by the spec they will have to create their own,
+     * they can see TinCan\Util::getTimestamp for an example of how to do so
+     *
+     * based on the signature comparison tests it seems that DateTime can store
+     * subsecond precisions, but just not output them as part of ISO handling?
+     * it might be possible to switch to a DateTime and just do manual formatting
+     * still with the subsecond value (need to research it fully)
+     * @var string
+     */
     protected $timestamp;
 
+    /**
+     * StatementBase constructor.
+     *
+     * $arg elements:
+     * * var Agent|Group|array $actor
+     * * var Context|array $context
+     * * var Activity|Agent|Group|StatementRef|SubStatement|array $object
+     * * var Result|array $result
+     * * var Activity|Agent|Group|StatementRef|SubStatement|array $target
+     * * var \DateTime|string $timestamp ISO 8601 timestamp
+     * * var Verb|array $verb
+     *
+     * @param array $arg
+     */
     public function __construct($arg = []) {
         if ($arg) {
             $this->_fromArray($arg);
@@ -56,6 +83,10 @@ abstract class StatementBase implements VersionableInterface, ComparableInterfac
         }
     }
 
+    /**
+     * @param array $result
+     * @param Version|string $version
+     */
     private function _asVersion(&$result, $version) {
         if (isset($result['target'])) {
             $result['object'] = $result['target'];
@@ -63,6 +94,13 @@ abstract class StatementBase implements VersionableInterface, ComparableInterfac
         }
     }
 
+    /**
+     * Compares the instance with a provided instance for determining
+     * whether an object received in a signature is a meaningful match.
+     *
+     * @param StatementBase $fromSig
+     * @return array ['success' => bool, 'reason' => string]
+     */
     public function compareWithSignature($fromSig) {
         foreach (array('actor', 'verb', 'target', 'context', 'result') as $property) {
             if (! isset($this->$property) && ! isset($fromSig->$property)) {
@@ -108,6 +146,10 @@ abstract class StatementBase implements VersionableInterface, ComparableInterfac
         return array('success' => true, 'reason' => null);
     }
 
+    /**
+     * @param Agent|Group|array $value
+     * @return $this
+     */
     public function setActor($value) {
         if ((! $value instanceof Agent && ! $value instanceof Group) && is_array($value)) {
             if (isset($value['objectType']) && $value['objectType'] === 'Group') {
@@ -122,8 +164,16 @@ abstract class StatementBase implements VersionableInterface, ComparableInterfac
 
         return $this;
     }
+
+    /**
+     * @return Agent|Group
+     */
     public function getActor() { return $this->actor; }
 
+    /**
+     * @param Verb|array $value
+     * @return $this
+     */
     public function setVerb($value) {
         if (! $value instanceof Verb) {
             $value = new Verb($value);
@@ -133,8 +183,18 @@ abstract class StatementBase implements VersionableInterface, ComparableInterfac
 
         return $this;
     }
+
+    /**
+     * @return Verb
+     */
     public function getVerb() { return $this->verb; }
 
+    /**
+     * @param Activity|Agent|Group|StatementRef|SubStatement|array $value
+     * @throws \InvalidArgumentException if $value['objectType'] is not in
+     * ['Activity', 'Agent', 'Group', 'StatementRef', 'SubStatement']
+     * @return $this
+     */
     public function setTarget($value) {
         if (! $value instanceof StatementTargetInterface && is_array($value)) {
             if (isset($value['objectType'])) {
@@ -166,12 +226,27 @@ abstract class StatementBase implements VersionableInterface, ComparableInterfac
 
         return $this;
     }
+
+    /**
+     * @return Activity|Agent|Group|StatementRef|SubStatement
+     */
     public function getTarget() { return $this->target; }
 
-    // sugar methods
+    /**
+     * @param Activity|Agent|Group|StatementRef|SubStatement|array $value
+     * @return $this
+     */
     public function setObject($value) { return $this->setTarget($value); }
+
+    /**
+     * @return Activity|Agent|Group|StatementRef|SubStatement
+     */
     public function getObject() { return $this->getTarget(); }
 
+    /**
+     * @param Result|array $value
+     * @return $this
+     */
     public function setResult($value) {
         if (! $value instanceof Result && is_array($value)) {
             $value = new Result($value);
@@ -181,8 +256,16 @@ abstract class StatementBase implements VersionableInterface, ComparableInterfac
 
         return $this;
     }
+
+    /**
+     * @return Result
+     */
     public function getResult() { return $this->result; }
 
+    /**
+     * @param Context|array $value
+     * @return $this
+     */
     public function setContext($value) {
         if (! $value instanceof Context && is_array($value)) {
             $value = new Context($value);
@@ -192,8 +275,17 @@ abstract class StatementBase implements VersionableInterface, ComparableInterfac
 
         return $this;
     }
+
+    /**
+     * @return Context
+     */
     public function getContext() { return $this->context; }
 
+    /**
+     * @param \DateTime|string $value ISO 8601 timestamp
+     * @throws \InvalidArgumentException if $value is not a string or DateTime object
+     * @return $this
+     */
     public function setTimestamp($value) {
         if (isset($value)) {
             if ($value instanceof \DateTime) {
@@ -212,5 +304,9 @@ abstract class StatementBase implements VersionableInterface, ComparableInterfac
 
         return $this;
     }
+
+    /**
+     * @return string
+     */
     public function getTimestamp() { return $this->timestamp; }
 }
