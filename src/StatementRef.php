@@ -19,24 +19,43 @@ namespace TinCan;
 
 use InvalidArgumentException;
 
+/**
+ * A Statement Reference is a pointer to another pre-existing Statement.
+ */
 class StatementRef implements VersionableInterface, StatementTargetInterface, ComparableInterface
 {
     use ArraySetterTrait, FromJSONTrait, AsVersionTrait, SignatureComparisonTrait;
 
+    /** @inheritdoc */
     private $objectType = 'StatementRef';
 
+    /** @var string UUID */
     protected $id;
 
-    public function __construct() {
-        if (func_num_args() == 1) {
-            $arg = func_get_arg(0);
-
+    /**
+     * StatementRef constructor.
+     *
+     * $arg elements:
+     * * var string $id UUID
+     *
+     * @param array $arg
+     */
+    public function __construct($arg = []) {
+        if ($arg) {
             $this->_fromArray($arg);
         }
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getObjectType() { return $this->objectType; }
 
+    /**
+     * @param string $value UUID
+     * @throws \InvalidArgumentException if $value does not match a UUID pattern
+     * @return $this
+     */
     public function setId($value) {
         if (isset($value) && ! preg_match(Util::UUID_REGEX, $value)) {
             throw new InvalidArgumentException('arg1 must be a UUID');
@@ -44,5 +63,9 @@ class StatementRef implements VersionableInterface, StatementTargetInterface, Co
         $this->id = $value;
         return $this;
     }
+
+    /**
+     * @return string UUID
+     */
     public function getId() { return $this->id; }
 }

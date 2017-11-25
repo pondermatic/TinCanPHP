@@ -19,5 +19,12 @@ namespace TinCan;
 
 interface ComparableInterface
 {
+    /**
+     * Compares the instance with a provided instance for determining
+     * whether an object received in a signature is a meaningful match.
+     *
+     * @param object $fromSig
+     * @return array ['success' => bool, 'reason' => string]
+     */
     public function compareWithSignature($fromSig);
 }

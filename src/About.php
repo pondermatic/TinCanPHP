@@ -17,17 +17,34 @@
 
 namespace TinCan;
 
+/**
+ * Contains information about this LRS, including the xAPI version supported.
+ *
+ * Primarily this resource exists to allow Clients that support multiple xAPI
+ * versions to decide which version to use when communicating with the LRS.
+ * Extensions are included to allow other uses to emerge.
+ */
 class About implements VersionableInterface
 {
     use ArraySetterTrait, FromJSONTrait, AsVersionTrait;
 
+    /** @var Version[]|string[] */
     protected $version;
+
+    /** @var Extensions */
     protected $extensions;
 
-    public function __construct() {
-        if (func_num_args() == 1) {
-            $arg = func_get_arg(0);
-
+    /**
+     * About constructor.
+     *
+     * $arg elements:
+     * * var Extensions|array $extensions
+     * * var Version[]|string[] $version
+     *
+     * @param array $arg
+     */
+    public function __construct($arg = []) {
+        if ($arg) {
             $this->_fromArray($arg);
         }
 
@@ -39,9 +56,21 @@ class About implements VersionableInterface
         }
     }
 
+    /**
+     * @param string[] $value
+     * @return $this
+     */
     public function setVersion($value) { $this->version = $value; return $this; }
+
+    /**
+     * @return string[]
+     */
     public function getVersion() { return $this->version; }
 
+    /**
+     * @param Extensions|array $value
+     * @return $this
+     */
     public function setExtensions($value) {
         if (! $value instanceof Extensions) {
             $value = new Extensions($value);
@@ -51,5 +80,9 @@ class About implements VersionableInterface
 
         return $this;
     }
+
+    /**
+     * @return Extensions
+     */
     public function getExtensions() { return $this->extensions; }
 }

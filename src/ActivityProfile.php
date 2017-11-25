@@ -17,10 +17,36 @@
 
 namespace TinCan;
 
+/**
+ * The Activity Profile Resource is much like the State Resource, allowing for
+ * arbitrary key / document pairs to be saved which are related to an Activity.
+ */
 class ActivityProfile extends Document
 {
+    /** @var Activity */
     protected $activity;
 
+    /**
+     * ActivityProfile constructor.
+     *
+     * $arg elements:
+     * * var Activity|array $activity
+     * * var string $content
+     * * var string $contentType
+     * * var string $etag HTTP 1.1 entity tag
+     * * var string $id
+     * * var \DateTime|string $timestamp ISO 8601
+     *
+     * @param array $arg
+     */
+    public function __construct() {
+        parent::__construct(func_get_args());
+    }
+
+    /**
+     * @param Activity|array $value
+     * @return $this
+     */
     public function setActivity($value) {
         if (! $value instanceof Activity && is_array($value)) {
             $value = new Activity($value);
@@ -30,5 +56,9 @@ class ActivityProfile extends Document
 
         return $this;
     }
+
+    /**
+     * @return Activity
+     */
     public function getActivity() { return $this->activity; }
 }

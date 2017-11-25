@@ -17,21 +17,38 @@
 
 namespace TinCan;
 
+/**
+ * A list of Statements in reverse chronological order based on "stored" time.
+ */
 class StatementsResult
 {
     use ArraySetterTrait, FromJSONTrait;
 
+    /** @var Statement[] */
     protected $statements;
+
+    /** @var string IRL */
     protected $more;
 
-    public function __construct() {
-        if (func_num_args() == 1) {
-            $arg = func_get_arg(0);
-
+    /**
+     * StatementsResult constructor.
+     *
+     * $arg elements:
+     * * var string $more IRL
+     * * var Statement[]|array[] $statements
+     *
+     * @param array $arg
+     */
+    public function __construct($arg = []) {
+        if ($arg) {
             $this->_fromArray($arg);
         }
     }
 
+    /**
+     * @param Statement[]|array[] $value
+     * @return $this
+     */
     public function setStatements($value) {
         foreach ($value as $k => $v) {
             if (! $value[$k] instanceof Statement) {
@@ -43,7 +60,20 @@ class StatementsResult
 
         return $this;
     }
+
+    /**
+     * @return Statement[]
+     */
     public function getStatements() { return $this->statements; }
+
+    /**
+     * @param string $value IRL
+     * @return $this
+     */
     public function setMore($value) { $this->more = $value; return $this; }
+
+    /**
+     * @return string IRL
+     */
     public function getMore() { return $this->more; }
 }

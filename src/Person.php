@@ -17,25 +17,63 @@
 
 namespace TinCan;
 
+/**
+ * The Person Object is very similar to an Agent Object, but instead of each
+ * attribute having a single value, each attribute has an array value, and it
+ * is legal to include multiple identifying properties.
+ *
+ * This is different from the FOAF
+ * ([Friend Of A Friend](http://xmlns.com/foaf/spec/#term_Agent))
+ * concept of person, person is being used here to indicate a person-centric
+ * view of the LRS Agent data, but Agents just refer to one persona
+ * (a person in one context).
+ */
 class Person implements VersionableInterface
 {
     use ArraySetterTrait, FromJSONTrait;
+
+    /** @var string */
     protected $objectType = 'Person';
 
+    /** @var string */
     protected $name;
+
+    /** @var string mailto IRI */
     protected $mbox;
+
+    /** @var string */
     protected $mbox_sha1sum;
+
+    /** @var string URI */
     protected $openid;
+
+    /** @var AgentAccount */
     protected $account;
 
-    public function __construct() {
-        if (func_num_args() == 1) {
-            $arg = func_get_arg(0);
-
+    /**
+     * Person constructor.
+     *
+     * $arg elements:
+     * * var AgentAccount $account
+     * * var string $mbox mailto IRI
+     * * var string $mbox_sha1sum
+     * * var string $name
+     * * var string $openid URI
+     *
+     * @param array $arg
+     */
+    public function __construct($arg = []) {
+        if ($arg) {
             $this->_fromArray($arg);
         }
     }
 
+    /**
+     * Collects defined object properties for a given version into an array.
+     *
+     * @param Version|string $version
+     * @return array
+     */
     public function asVersion($version) {
         $result = array(
             'objectType' => $this->objectType
@@ -65,20 +103,63 @@ class Person implements VersionableInterface
         return $result;
     }
 
+    /**
+     * @return string
+     */
     public function getObjectType() { return $this->objectType; }
 
+    /**
+     * @param string $value
+     * @return $this
+     */
     public function setName($value) { $this->name = $value; return $this; }
+
+    /**
+     * @return string
+     */
     public function getName() { return $this->name; }
 
+    /**
+     * @param string $value mailto IRI
+     * @return $this
+     */
     public function setMbox($value) { $this->mbox = $value; return $this; }
+
+    /**
+     * @return string mailto IRI
+     */
     public function getMbox() { return $this->mbox; }
 
+    /**
+     * @param string $value
+     * @return $this
+     */
     public function setMbox_sha1sum($value) { $this->mbox_sha1sum = $value; return $this; }
+
+    /**
+     * @return string
+     */
     public function getMbox_sha1sum() {return $this->mbox_sha1sum;}
 
+    /**
+     * @param string $value URI
+     * @return $this
+     */
     public function setOpenid($value) { $this->openid = $value; return $this; }
+
+    /**
+     * @return string URI
+     */
     public function getOpenid() { return $this->openid; }
 
+    /**
+     * @param AgentAccount $value
+     * @return $this
+     */
     public function setAccount($value) { $this->account = $value; return $this; }
+
+    /**
+     * @return AgentAccount
+     */
     public function getAccount() { return $this->account; }
 }

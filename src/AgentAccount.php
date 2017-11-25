@@ -17,23 +17,54 @@
 
 namespace TinCan;
 
+/**
+ * A user account on an existing system, such as a private system (LMS or
+ * intranet) or a public system (social networking site).
+ */
 class AgentAccount implements VersionableInterface, ComparableInterface
 {
     use ArraySetterTrait, FromJSONTrait, AsVersionTrait, SignatureComparisonTrait;
 
+    /** @var string */
     protected $name;
+
+    /** @var string IRL */
     protected $homePage;
 
-    public function __construct() {
-        if (func_num_args() == 1) {
-            $arg = func_get_arg(0);
-
+    /**
+     * AgentAccount constructor.
+     *
+     * $arg elements:
+     * * var string $homePage IRL
+     * * var string $name
+     *
+     * @param array $arg
+     */
+    public function __construct($arg = []) {
+        if ($arg) {
             $this->_fromArray($arg);
         }
     }
 
+    /**
+     * @param string $value
+     * @return $this
+     */
     public function setName($value) { $this->name = $value; return $this; }
+
+    /**
+     * @return string
+     */
     public function getName() { return $this->name; }
+
+    /**
+     * @param string $value IRL
+     * @return $this
+     */
     public function setHomePage($value) { $this->homePage = $value; return $this; }
+
+    /**
+     * @return string
+     */
     public function getHomePage() { return $this->homePage; }
 }

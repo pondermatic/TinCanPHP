@@ -17,19 +17,34 @@
 
 namespace TinCan;
 
+/**
+ * Is the action being done by the Actor within the Activity within a Statement.
+ * A Verb represents the "did" in "I did this".
+ */
 class Verb implements VersionableInterface, ComparableInterface
 {
     use ArraySetterTrait, FromJSONTrait, AsVersionTrait, SignatureComparisonTrait;
 
+    /** @var array */
     static private $signatureSkipProperties = array('display');
 
+    /** @var string IRI */
     protected $id;
+
+    /** @var LanguageMap */
     protected $display;
 
-    public function __construct() {
-        if (func_num_args() == 1) {
-            $arg = func_get_arg(0);
-
+    /**
+     * Verb constructor.
+     *
+     * $arg elements:
+     * * var LanguageMap|array $display
+     * * var string $id IRI
+     *
+     * @param array $arg
+     */
+    public function __construct($arg = []) {
+        if ($arg) {
             $this->_fromArray($arg);
         }
 
@@ -38,10 +53,22 @@ class Verb implements VersionableInterface, ComparableInterface
         }
     }
 
-    // FEATURE: check IRI?
+    /**
+     * @todo FEATURE: check IRI?
+     * @param string $value IRI
+     * @return $this
+     */
     public function setId($value) { $this->id = $value; return $this; }
+
+    /**
+     * @return string IRI
+     */
     public function getId() { return $this->id; }
 
+    /**
+     * @param LanguageMap|array $value
+     * @return $this
+     */
     public function setDisplay($value) {
         if (! $value instanceof LanguageMap) {
             $value = new LanguageMap($value);
@@ -51,8 +78,15 @@ class Verb implements VersionableInterface, ComparableInterface
 
         return $this;
     }
+
+    /**
+     * @return LanguageMap
+     */
     public function getDisplay() { return $this->display; }
 
+    /**
+     * @return Verb
+     */
     static public function Voided() {
         return new self(
             [

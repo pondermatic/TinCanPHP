@@ -17,21 +17,46 @@
 
 namespace TinCan;
 
+/**
+ * Represents a measured outcome related to the Statement in which it is included.
+ */
 class Result implements VersionableInterface, ComparableInterface
 {
     use ArraySetterTrait, FromJSONTrait, AsVersionTrait, SignatureComparisonTrait;
 
+    /** @var Score */
     protected $score;
+
+    /** @var bool */
     protected $success;
+
+    /** @var bool */
     protected $completion;
+
+    /** @var string ISO 8601 format */
     protected $duration;
+
+    /** @var string */
     protected $response;
+
+    /** @var Extensions */
     protected $extensions;
 
-    public function __construct() {
-        if (func_num_args() == 1) {
-            $arg = func_get_arg(0);
-
+    /**
+     * Result constructor.
+     *
+     * $arg elements:
+     * * var bool $completion
+     * * var string $duration ISO 8601 format
+     * * var Extensions|array $extensions
+     * * var Score|array $score
+     * * var bool $success
+     * * var string $response
+     *
+     * @param array $arg
+     */
+    public function __construct($arg = []) {
+        if ($arg) {
             $this->_fromArray($arg);
         }
 
@@ -40,6 +65,10 @@ class Result implements VersionableInterface, ComparableInterface
         }
     }
 
+    /**
+     * @param array $result
+     * @param Version|string $version
+     */
     private function _asVersion(&$result, $version) {
         //
         // empty string is an invalid duration
@@ -49,6 +78,10 @@ class Result implements VersionableInterface, ComparableInterface
         }
     }
 
+    /**
+     * @param Score|array $value
+     * @return $this
+     */
     public function setScore($value) {
         if (! $value instanceof Score && is_array($value)) {
             $value = new Score($value);
@@ -58,17 +91,60 @@ class Result implements VersionableInterface, ComparableInterface
 
         return $this;
     }
+
+    /**
+     * @return Score
+     */
     public function getScore() { return $this->score; }
 
+    /**
+     * @param bool $value
+     * @return $this
+     */
     public function setSuccess($value) { $this->success = (bool) $value; return $this; }
+
+    /**
+     * @return bool
+     */
     public function getSuccess() { return $this->success; }
+
+    /**
+     * @param bool $value
+     * @return $this
+     */
     public function setCompletion($value) { $this->completion = (bool) $value; return $this; }
+
+    /**
+     * @return bool
+     */
     public function getCompletion() { return $this->completion; }
+
+    /**
+     * @param string $value ISO 8601 format
+     * @return $this
+     */
     public function setDuration($value) { $this->duration = $value; return $this; }
+
+    /**
+     * @return string ISO 8601 format
+     */
     public function getDuration() { return $this->duration; }
+
+    /**
+     * @param string $value
+     * @return $this
+     */
     public function setResponse($value) { $this->response = $value; return $this; }
+
+    /**
+     * @return string
+     */
     public function getResponse() { return $this->response; }
 
+    /**
+     * @param Extensions|array $value
+     * @return $this
+     */
     public function setExtensions($value) {
         if (! $value instanceof Extensions) {
             $value = new Extensions($value);
@@ -78,5 +154,9 @@ class Result implements VersionableInterface, ComparableInterface
 
         return $this;
     }
+
+    /**
+     * @return Extensions
+     */
     public function getExtensions() { return $this->extensions; }
 }

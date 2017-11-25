@@ -17,25 +17,56 @@
 
 namespace TinCan;
 
+/**
+ * An individual actor tracked using Statements performing an action within
+ * an Activity. Is the "I" in "I did this".
+ */
 class Agent implements VersionableInterface, StatementTargetInterface, ComparableInterface
 {
     use ArraySetterTrait, FromJSONTrait;
+
+    /** @inheritdoc */
     protected $objectType = 'Agent';
 
+    /** @var string */
     protected $name;
+
+    /** @var string mailto IRI */
     protected $mbox;
+
+    /** @var string */
     protected $mbox_sha1sum;
+
+    /** @var string URI */
     protected $openid;
+
+    /** @var AgentAccount */
     protected $account;
 
-    public function __construct() {
-        if (func_num_args() == 1) {
-            $arg = func_get_arg(0);
-
+    /**
+     * Agent constructor.
+     *
+     * $arg elements:
+     * * var AgentAccount|array $account
+     * * var string $mbox mailto IRI
+     * * var string $mbox_sha1sum
+     * * var string $name
+     * * var string $openid
+     *
+     * @param array $arg
+     */
+    public function __construct($arg = []) {
+        if ($arg) {
             $this->_fromArray($arg);
         }
     }
 
+    /**
+     * Collects defined object properties for a given version into an array.
+     *
+     * @param Version|string $version
+     * @return array
+     */
     public function asVersion($version) {
         $result = array(
             'objectType' => $this->objectType
@@ -68,20 +99,33 @@ class Agent implements VersionableInterface, StatementTargetInterface, Comparabl
         return $result;
     }
 
+    /**
+     * Returns true if any of the inverse functional identifiers are set.
+     *
+     * @return bool
+     */
     public function isIdentified() {
         return (isset($this->mbox) || isset($this->mbox_sha1sum) || isset($this->openid) || isset($this->account));
     }
 
-    //
-    // having multiple IFIs set shouldn't cause a problem here
-    // so long as all of their values match their counterparts
-    //
-    // we could allow for multiple IFIs in the `this` object and
-    // ignore them missing in the signature but discussion ruled
-    // against that need since the serialization via asVersion
-    // shouldn't result in that ever for a valid statement
-    //
+    /**
+     * Compares the instance with a provided instance for determining
+     * whether an object received in a signature is a meaningful match.
+     *
+     * @param Agent $fromSig
+     * @return array ['success' => bool, 'reason' => string]
+     */
     public function compareWithSignature($fromSig) {
+        //
+        // having multiple IFIs set shouldn't cause a problem here
+        // so long as all of their values match their counterparts
+        //
+        // we could allow for multiple IFIs in the `this` object and
+        // ignore them missing in the signature but discussion ruled
+        // against that need since the serialization via asVersion
+        // shouldn't result in that ever for a valid statement
+        //
+
         //
         // mbox and mbox_sha1sum are a special case where they can be
         // equal but have to be transformed for comparison, check them
@@ -126,11 +170,26 @@ class Agent implements VersionableInterface, StatementTargetInterface, Comparabl
         return array('success' => true, 'reason' => null);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getObjectType() { return $this->objectType; }
 
+    /**
+     * @param string $value
+     * @return $this
+     */
     public function setName($value) { $this->name = $value; return $this; }
+
+    /**
+     * @return string
+     */
     public function getName() { return $this->name; }
 
+    /**
+     * @param string $value mailto IRI
+     * @return $this
+     */
     public function setMbox($value) {
         if (isset($value) && (! (stripos($value, 'mailto:') === 0))) {
             $value = 'mailto:' . $value;
@@ -138,9 +197,21 @@ class Agent implements VersionableInterface, StatementTargetInterface, Comparabl
         $this->mbox = $value;
         return $this;
     }
+
+    /**
+     * @return string mailto IRI
+     */
     public function getMbox() { return $this->mbox; }
 
+    /**
+     * @param string $value
+     * @return $this
+     */
     public function setMbox_sha1sum($value) { $this->mbox_sha1sum = $value; return $this; }
+
+    /**
+     * @return string
+     */
     public function getMbox_sha1sum() {
         if (isset($this->mbox_sha1sum)) {
             return $this->mbox_sha1sum;
@@ -152,9 +223,22 @@ class Agent implements VersionableInterface, StatementTargetInterface, Comparabl
 
         return null;
     }
+
+    /**
+     * @param string $value URI
+     * @return $this
+     */
     public function setOpenid($value) { $this->openid = $value; return $this; }
+
+    /**
+     * @return string URI
+     */
     public function getOpenid() { return $this->openid; }
 
+    /**
+     * @param AgentAccount|array $value
+     * @return $this
+     */
     public function setAccount($value) {
         if (! $value instanceof AgentAccount && is_array($value)) {
             $value = new AgentAccount($value);
@@ -164,5 +248,9 @@ class Agent implements VersionableInterface, StatementTargetInterface, Comparabl
 
         return $this;
     }
+
+    /**
+     * @return AgentAccount
+     */
     public function getAccount() { return $this->account; }
 }

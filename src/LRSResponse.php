@@ -17,14 +17,29 @@
 
 namespace TinCan;
 
+/**
+ * Holds the result of sending a request to a LRS.
+ */
 class LRSResponse
 {
     use ArraySetterTrait;
 
+    /** @var bool */
     public $success;
+
+    /** @var About|Activity|ActivityProfile|AgentProfile|Person|State|Statement|Statement[]|StatementsResult|string[]|string */
     public $content;
+
+    /** @var array */
     public $httpResponse;
 
+    /**
+     * LRSResponse constructor.
+     *
+     * @param bool $success
+     * @param mixed $content
+     * @param array $httpResponse
+     */
     public function __construct($success, $content, $httpResponse) {
         $this->success = (bool) $success;
         $this->content = $content;

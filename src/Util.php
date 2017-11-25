@@ -21,10 +21,11 @@ class Util
 {
     const UUID_REGEX = '/[a-f0-9]{8}-[a-f0-9]{4}-[1-5][a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}/i';
 
-    //
-    // Based on code from
-    // http://stackoverflow.com/questions/2040240/php-function-to-generate-v4-uuid
-    //
+    /**
+     * Based on code from
+     * http://stackoverflow.com/questions/2040240/php-function-to-generate-v4-uuid
+     * @return string
+     */
     public static function getUUID() {
         $randomString = openssl_random_pseudo_bytes(16);
         $time_low = bin2hex(substr($randomString, 0, 4));
@@ -61,12 +62,14 @@ class Util
         );
     }
 
-    //
-    // Returns the current date+time in string format with
-    // sub-second precision
-    //
-    // Based on code from
-    // http://stackoverflow.com/a/4414060/1464957
+    /**
+     * Returns the current date+time in string format with
+     * sub-second precision
+     *
+     * Based on code from
+     * http://stackoverflow.com/a/4414060/1464957
+     * @return string
+     */
     public static function getTimestamp() {
         $time = microtime(true);
         $microseconds = sprintf('%06d', ($time - floor($time)) * 1000000);

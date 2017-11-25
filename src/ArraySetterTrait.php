@@ -19,6 +19,11 @@ namespace TinCan;
 
 trait ArraySetterTrait
 {
+    /**
+     * Calls setProperty() for each property.
+     *
+     * @param array $options
+     */
     private function _fromArray($options) {
         foreach (get_object_vars($this) as $k => $v) {
             $method = 'set' . ucfirst($k);

@@ -20,46 +20,75 @@ namespace TinCan;
 use InvalidArgumentException;
 use Namshi\JOSE\JWS;
 
+/**
+ * A data structure showing evidence for any sort of experience or event which
+ * is to be tracked in xAPI as a Learning Record.
+ *
+ * A set of several Statements, each representing an event in time, might be
+ * used to track complete details about a learning experience.
+ */
 class Statement extends StatementBase
 {
     const SIGNATURE_USAGE_TYPE = 'http://adlnet.gov/expapi/attachments/signature';
     const SIGNATURE_CONTENT_TYPE = 'application/octet-stream';
 
+    /** @var string UUID */
     protected $id;
 
-    //
-    // stored *must* store a string because DateTime doesn't
-    // support sub-second precision, the setter will take a DateTime and convert
-    // it to the proper ISO8601 representation, but if a user needs sub-second
-    // precision as afforded by the spec they will have to create their own,
-    // they can see TinCan\Util::getTimestamp for an example of how to do so
-    //
+    /**
+     * stored *must* store a string because DateTime doesn't
+     * support sub-second precision, the setter will take a DateTime and convert
+     * it to the proper ISO8601 representation, but if a user needs sub-second
+     * precision as afforded by the spec they will have to create their own,
+     * they can see TinCan\Util::getTimestamp for an example of how to do so
+     * @var string
+     */
     protected $stored;
 
+    /** @var Agent */
     protected $authority;
+
+    /** @var Version|string */
     protected $version;
+
+    /** @var Attachment[] */
     protected $attachments;
 
-    public function __construct() {
-        call_user_func_array('parent::__construct', func_get_args());
+    /**
+     * Statement constructor.
+     *
+     * $arg elements:
+     * * var Agent|Group|array $actor
+     * * var Context|array $context
+     * * var Activity|Agent|Group|StatementRef|SubStatement|array $object
+     * * var Result|array $result
+     * * var Activity|Agent|Group|StatementRef|SubStatement|array $target
+     * * var \DateTime|string $timestamp ISO 8601 timestamp
+     * * var Verb|array $verb
+     *
+     * @param array $arg
+     */
+    public function __construct($arg = []) {
+        parent::__construct($arg);
 
-        if (func_num_args() == 1) {
-            $arg = func_get_arg(0);
-
-            //
-            // 'object' isn't in the list of properties so ._fromArray doesn't
-            // pick it up correctly, but 'target' and 'object' shouldn't be in
-            // the args at the same time, so handle 'object' here
-            //
-            if (isset($arg['object'])) {
-                $this->setObject($arg['object']);
-            }
+        //
+        // 'object' isn't in the list of properties so ._fromArray doesn't
+        // pick it up correctly, but 'target' and 'object' shouldn't be in
+        // the args at the same time, so handle 'object' here
+        //
+        if (isset($arg['object'])) {
+            $this->setObject($arg['object']);
         }
         if (! isset($this->attachments)) {
             $this->setAttachments(array());
         }
     }
 
+    /**
+     * Generates a new id and current timestamp.
+     *
+     * @return $this
+     */
     public function stamp() {
         $this->setId(Util::getUUID());
         $this->setTimestamp(Util::getTimestamp());
@@ -67,6 +96,13 @@ class Statement extends StatementBase
         return $this;
     }
 
+    /**
+     * Compares the instance with a provided instance for determining
+     * whether an object received in a signature is a meaningful match.
+     *
+     * @param Statement $fromSig
+     * @return array ['success' => bool, 'reason' => string]
+     */
     public function compareWithSignature($fromSig) {
         foreach (array('id', 'attachments') as $property) {
             if (! isset($this->$property) && ! isset($fromSig->$property)) {
@@ -100,6 +136,10 @@ class Statement extends StatementBase
         return parent::compareWithSignature($fromSig);
     }
 
+    /**
+     * @param Version|string $version
+     * @return array
+     */
     private function serializeForSignature($version) {
         if (! isset($this->actor)) {
             throw new \InvalidArgumentException('actor must be present in signed statement');
@@ -121,6 +161,18 @@ class Statement extends StatementBase
         return $result;
     }
 
+    /**
+     * Adds a digital signature as an attachment to this statement.
+     *
+     * @param string $privateKeyFile can be one of the following:
+     * 1. a string having the format file://path/to/file.pem. The named file must
+     *    contain a PEM encoded certificate/private key (it may contain both).
+     * 2. a PEM formatted private key
+     * @param string $privateKeyPass
+     * @param array $options
+     * @throws \Exception if private key can not be parsed
+     * @throws InvalidArgumentException if $options['algorithm] is not in ['RS256', 'RS384', 'RS512']
+     */
     public function sign($privateKeyFile, $privateKeyPass, $options = array()) {
         if (! isset($options['version'])) {
             $options['version'] = Version::latest();
@@ -209,6 +261,14 @@ class Statement extends StatementBase
         $this->addAttachment($attachment);
     }
 
+    /**
+     * Verifies this statement's signature.
+     *
+     * @param array $options
+     * @throws \InvalidArgumentException if loading the signature attachment fails
+     * @throws \InvalidArgumentException if $options['algorithm'] is not in ['RS256', 'RS384', 'RS512']
+     * @return array
+     */
     public function verify($options = array()) {
         if (! isset($options['version'])) {
             $options['version'] = Version::latest();
@@ -349,6 +409,11 @@ class Statement extends StatementBase
         return array('success' => true, 'jws' => $jws);
     }
 
+    /**
+     * @param string $value UUID
+     * @throws \InvalidArgumentException if $value does not match a UUID pattern
+     * @return $this
+     */
     public function setId($value) {
         if (isset($value) && ! preg_match(Util::UUID_REGEX, $value)) {
             throw new \InvalidArgumentException('arg1 must be a UUID "' . $value . '"');
@@ -356,9 +421,22 @@ class Statement extends StatementBase
         $this->id = $value;
         return $this;
     }
+
+    /**
+     * @return string
+     */
     public function getId() { return $this->id; }
+
+    /**
+     * @return bool
+     */
     public function hasId() { return isset($this->id); }
 
+    /**
+     * @param \DateTime|string $value
+     * @throws \InvalidArgumentException if $value is not a string or a DateTime object
+     * @return $this
+     */
     public function setStored($value) {
         if (isset($value)) {
             if ($value instanceof \DateTime) {
@@ -377,8 +455,16 @@ class Statement extends StatementBase
 
         return $this;
     }
+
+    /**
+     * @return string
+     */
     public function getStored() { return $this->stored; }
 
+    /**
+     * @param Agent|array $value
+     * @return $this
+     */
     public function setAuthority($value) {
         if (! $value instanceof Agent && is_array($value)) {
             $value = new Agent($value);
@@ -388,11 +474,27 @@ class Statement extends StatementBase
 
         return $this;
     }
+
+    /**
+     * @return Agent
+     */
     public function getAuthority() { return $this->authority; }
 
+    /**
+     * @param string $value
+     * @return $this
+     */
     public function setVersion($value) { $this->version = $value; return $this; }
+
+    /**
+     * @return string
+     */
     public function getVersion() { return $this->version; }
 
+    /**
+     * @param Attachment[]|array[] $value
+     * @return $this
+     */
     public function setAttachments($value) {
         foreach ($value as $k => $v) {
             if (! $value[$k] instanceof Attachment) {
@@ -404,8 +506,20 @@ class Statement extends StatementBase
 
         return $this;
     }
+
+    /**
+     * @return Attachment[]
+     */
     public function getAttachments() { return $this->attachments; }
+
+    /**
+     * @return bool
+     */
     public function hasAttachments() { return count($this->attachments) > 0; }
+
+    /**
+     * @return bool
+     */
     public function hasAttachmentsWithContent() {
         if (! $this->hasAttachments()) {
             return false;
@@ -419,6 +533,11 @@ class Statement extends StatementBase
 
         return false;
     }
+
+    /**
+     * @param Attachment|array $value
+     * @return $this
+     */
     public function addAttachment($value) {
         if (! $value instanceof Attachment) {
             $value = new Attachment($value);

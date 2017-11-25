@@ -17,9 +17,22 @@
 
 namespace TinCan;
 
+/**
+ * A SubStatement is like a StatementRef in that it is included as part of a
+ * containing Statement, but unlike a StatementRef, it does not represent an
+ * event that has occurred.
+ *
+ * It can be used to describe, for example, a predication of a potential future
+ * Statement or the behavior a teacher looked for when evaluating a student
+ * (without representing the student actually doing that behavior).
+ */
 class SubStatement extends StatementBase implements StatementTargetInterface
 {
+    /** @inheritdoc */
     protected $objectType = 'SubStatement';
 
+    /**
+     * @inheritdoc
+     */
     public function getObjectType() { return $this->objectType; }
 }

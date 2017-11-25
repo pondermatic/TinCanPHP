@@ -22,8 +22,10 @@ use InvalidArgumentException;
 /**
  * TinCan API Version
  *
+ * @method static Version v095()
+ * @method static Version v100()
+ * @method static Version v101()
  * @internal implemented similar to a type-safe enum
- * @package  TinCan
  */
 final class Version
 {

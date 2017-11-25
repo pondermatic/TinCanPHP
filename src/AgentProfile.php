@@ -17,10 +17,36 @@
 
 namespace TinCan;
 
+/**
+ * The Agent Profile Resource is much like the State Resource, allowing for
+ * arbitrary key / document pairs to be saved which are related to an Agent.
+ */
 class AgentProfile extends Document
 {
+    /** @var Agent|Group */
     protected $agent;
 
+    /**
+     * AgentProfile constructor.
+     *
+     * $arg elements:
+     * * var Agent|array $agent
+     * * var string $content
+     * * var string $contentType
+     * * var string $etag HTTP 1.1 entity tag
+     * * var string $id
+     * * var \DateTime|string $timestamp ISO 8601
+     *
+     * @param array $arg
+     */
+    public function __construct() {
+        parent::__construct(func_get_args());
+    }
+
+    /**
+     * @param Agent|array $value
+     * @return $this
+     */
     public function setAgent($value) {
         if ((! $value instanceof Agent && ! $value instanceof Group) && is_array($value)) {
             if (isset($value['objectType']) && $value['objectType'] === 'Group') {
@@ -35,5 +61,9 @@ class AgentProfile extends Document
 
         return $this;
     }
+
+    /**
+     * @return Agent|Group
+     */
     public function getAgent() { return $this->agent; }
 }

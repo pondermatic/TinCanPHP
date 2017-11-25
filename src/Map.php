@@ -17,36 +17,72 @@
 
 namespace TinCan;
 
+/**
+ * Class Map
+ *
+ * @method void unset(string|int $code)
+ */
 abstract class Map implements VersionableInterface
 {
     use FromJSONTrait;
 
+    /** @var array */
     protected $_map;
 
-    public function __construct() {
-        if (func_num_args() == 1) {
-            $this->_map = func_get_arg(0);
+    /**
+     * Map constructor.
+     *
+     * $arg elements:
+     * * var array $map
+     *
+     * @param array $arg
+     */
+    public function __construct($arg = []) {
+        if ($arg) {
+            $this->_map = $arg;
         }
         else {
             $this->_map = array();
         }
     }
 
+    /**
+     * Collects defined object properties for a given version into an array.
+     *
+     * @param null $version
+     * @return array|null
+     */
     public function asVersion($version = null) {
         return $this->isEmpty() ? null : $this->_map;
     }
 
+    /**
+     * @param string|int $code
+     * @param mixed $value
+     */
     public function set($code, $value) {
         $this->_map[$code] = $value;
     }
+
+    /**
+     * @param string|int $code
+     */
     private function _unset($code) {
         unset($this->_map[$code]);
     }
 
+    /**
+     * @return bool
+     */
     public function isEmpty() {
         return count($this->_map) === 0;
     }
 
+    /**
+     * @param string $func
+     * @param array $args
+     * @throws \BadMethodCallException if method does not exist
+     */
     public function __call($func, $args) {
         switch ($func) {
             case 'unset':
