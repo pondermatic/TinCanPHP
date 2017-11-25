@@ -17,7 +17,6 @@
 
 namespace TinCanTest;
 
-use PHPUnit\Framework\TestCase;
 use TinCan\Activity;
 use TinCan\Agent;
 use TinCan\Attachment;
@@ -29,7 +28,7 @@ use TinCan\Verb;
 use TinCan\Version;
 use Namshi\JOSE\JWS;
 
-class StatementTest extends TestCase {
+class StatementTest extends \PHPUnit_Framework_TestCase {
     use TestCompareWithSignatureTrait;
 
     public function testInstantiation() {
@@ -602,38 +601,20 @@ class StatementTest extends TestCase {
     public function testSignNoArgs() {
         $obj = new Statement();
 
-        # PHP 7.1 promoted "too few arguments" warning to an error exception
-        if (version_compare(PHP_VERSION, '7.1') >= 0) {
-            $this->setExpectedExceptionRegExp(
-                'ArgumentCountError',
-                '/Too few arguments to function ' . preg_quote(get_class($obj)) . '::sign\(\), 0 passed in '
-                . preg_quote(__FILE__) . ' on line \d+ and at least 2 expected/'
-            );
-        } else {
-            $this->setExpectedException(
-                'PHPUnit_Framework_Error_Warning',
-                (getenv('TRAVIS_PHP_VERSION') == "hhvm" ? 'sign() expects at least 2 parameters, 0 given' : 'Missing argument 1')
-            );
-        }
+        $this->setExpectedException(
+            'PHPUnit_Framework_Error_Warning',
+            (getenv('TRAVIS_PHP_VERSION') == "hhvm" ? 'sign() expects at least 2 parameters, 0 given' : 'Missing argument 1')
+        );
         $obj->sign();
     }
 
     public function testSignOneArg() {
         $obj = new Statement();
 
-        # PHP 7.1 promoted "too few arguments" warning to an error exception
-        if (version_compare(PHP_VERSION, '7.1') >= 0) {
-            $this->setExpectedExceptionRegExp(
-                'ArgumentCountError',
-                '/Too few arguments to function ' . preg_quote(get_class($obj)) . '::sign\(\), 1 passed in '
-                . preg_quote(__FILE__) . ' on line \d+ and at least 2 expected/'
-            );
-        } else {
-            $this->setExpectedException(
-                'PHPUnit_Framework_Error_Warning',
-                (getenv('TRAVIS_PHP_VERSION') == "hhvm" ? 'sign() expects at least 2 parameters, 1 given' : 'Missing argument 2')
-            );
-        }
+        $this->setExpectedException(
+            'PHPUnit_Framework_Error_Warning',
+            (getenv('TRAVIS_PHP_VERSION') == "hhvm" ? 'sign() expects at least 2 parameters, 1 given' : 'Missing argument 2')
+        );
         $obj->sign('test');
     }
 
@@ -822,7 +803,7 @@ class StatementTest extends TestCase {
                 'x5c' => ['notAValidCertificate']
             ]
         );
-        $content->setPayload(['prop' => 'val'], false);
+        $content->setPayload(['prop' => 'val']);
         $content->sign(openssl_pkey_get_private('file://' . $GLOBALS['KEYs']['private'], $GLOBALS['KEYs']['password']));
 
         $obj = new Statement(
@@ -852,7 +833,7 @@ class StatementTest extends TestCase {
                 'x5c' => ['notAValidCertificate']
             ]
         );
-        $content->setPayload(['prop' => 'val'], false);
+        $content->setPayload(['prop' => 'val']);
         $content->sign(openssl_pkey_get_private('file://' . $GLOBALS['KEYs']['private'], $GLOBALS['KEYs']['password']));
 
         $obj = new Statement(
@@ -884,7 +865,7 @@ class StatementTest extends TestCase {
                 'alg' => 'RS256'
             ]
         );
-        $content->setPayload(['prop' => 'val'], false);
+        $content->setPayload(['prop' => 'val']);
         $content->sign(openssl_pkey_get_private('file://' . $GLOBALS['KEYs']['private'], $GLOBALS['KEYs']['password']));
 
         $obj = new Statement(
@@ -916,7 +897,7 @@ class StatementTest extends TestCase {
                 'alg' => 'RS256'
             ]
         );
-        $content->setPayload(['prop' => 'val'], false);
+        $content->setPayload(['prop' => 'val']);
         $content->sign(openssl_pkey_get_private('file://' . $GLOBALS['KEYs']['private'], $GLOBALS['KEYs']['password']));
 
         $obj = new Statement(
